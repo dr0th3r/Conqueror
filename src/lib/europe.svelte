@@ -104,7 +104,7 @@ const includesD = /\sd=".+?"/
 const includesId = /id=".+"/
 const includesName = /name=".+"/
 
-let paths = europeMap.split("\n").filter(line => line.includes("d=")).map(line => {
+let paths = europeMap.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
     return {
         id: line.match(includesId)[0].trim().slice(4, -1),
         d: line.match(includesD)[0].trim().slice(3, -1),
@@ -112,6 +112,7 @@ let paths = europeMap.split("\n").filter(line => line.includes("d=")).map(line =
         color: "white"
     }
 })
+
 
 console.log(paths);
 
