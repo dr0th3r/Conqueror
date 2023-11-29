@@ -1,4 +1,7 @@
 <script>
+    import { onMount } from "svelte";
+    import QuestionModal from "$lib/question_modal.svelte"
+
     const europeMap = `
     <svg baseprofile="tiny" fill="#ececec" height="684" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1000" xmlns="http://www.w3.org/2000/svg">
         <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
@@ -100,37 +103,95 @@
     </svg>
     `
 
-const includesD = /\sd=".+?"/
-const includesId = /id=".+"/
-const includesName = /name=".+"/
+    let questions = []
+    let currentQuestion = null;
 
-let paths = europeMap.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
-    return {
-        id: line.match(includesId)[0].trim().slice(4, -1),
-        d: line.match(includesD)[0].trim().slice(3, -1),
-        name: line.match(includesName)[0].trim().slice(6, -1),
-        color: "white"
+    onMount(async () => {
+        const jsonData = await fetch("./questions.json");
+        const data = await jsonData.json();
+
+        questions = data;
+    })
+
+    const includesD = /\sd=".+?"/
+    const includesId = /id=".+?"/
+    const includesName = /name=".+?"/
+
+    let paths = europeMap.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
+        return {
+            id: line.match(includesId)[0].trim().slice(4, -1),
+            d: line.match(includesD)[0].trim().slice(3, -1),
+            name: line.match(includesName)[0].trim().slice(6, -1),
+            color: "#fff"
+        }
+    })
+
+    let conquered = [];
+
+    function startGame() {
+        conquered = [paths[Math.floor(Math.random() * paths.length)].id];
     }
-})
+
+    function showQuestion(countryId) {
+        console.log(countryId)
+
+        if (!questions || questions.length < 1) {
+            console.log("Questions failed to load");
+            return;
+        }
+
+        const countryQuestions = questions.filter((question) => question.country === countryId);
+
+        if (countryQuestions.length < 1) {
+            console.log("No country questions availiable.")
+            return;
+        }
 
 
-console.log(paths);
+        currentQuestion = countryQuestions[Math.floor(Math.random() * countryQuestions.length)];
+    }
 
+    function handleAnswer(correctAnswer) {
+
+        if (correctAnswer) {
+            conquered = [...conquered, currentQuestion.country]
+
+            console.log(conquered);
+        } else {
+            alert("Wrogn")
+        }
+
+        currentQuestion = null;
+    }
+
+    startGame();
 
 
 </script>
-
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
     {#each paths as path, id (id)}
-        <path d={path.d} id={path.id} name={path.name} fill={path.color} 
+        {@const isConquered = conquered.includes(path.id)}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <path 
+            d={path.d} 
+            id={path.id} 
+            name={path.name} 
+            fill={isConquered ? "green" : path.color} 
         on:mouseenter={() => {
-            path.color = "red"; 
-            path = path;
-        }} 
+            path.color = "red";
+            path = path; //for svelte to react
+        }}
         on:mouseleave={() => {
-            path.color = "white"; 
+            path.color = "fff";
             path = path;
-        }}></path>
+        }}
+        on:click={() => {
+            isConquered && console.log("Already conquered");
+
+            !isConquered && showQuestion(path.id);
+        }}
+        ></path>
     {/each}
     <circle cx="399.9" cy="390.8" id="0">
     </circle>
@@ -139,10 +200,13 @@ console.log(paths);
     <circle cx="521" cy="266.6" id="2">
     </circle>
 </svg>
+{#if !!currentQuestion}
+<QuestionModal question={currentQuestion} {handleAnswer}/>
+{/if}
 
 <style>
     path {
         transition: all .75s;
-/*         transition-timing-function: ease-out; */
+        cursor: pointer;
     }
 </style>

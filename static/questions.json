@@ -1,0 +1,62 @@
+[
+    {
+      "country": "FR",
+      "question": "What is the capital city of France?",
+      "answers": ["Berlin", "Madrid", "Paris", "Rome"],
+      "correctAnswer": 2
+    },
+    {
+      "country": "FR",
+      "question": "Which river runs through Paris?",
+      "answers": ["Seine", "Thames", "Danube", "Tiber"],
+      "correctAnswer": 0
+    },
+    {
+      "country": "FR",
+      "question": "What is the official language of France?",
+      "answers": ["English", "French", "Spanish", "Italian"],
+      "correctAnswer": 1
+    },
+    {
+      "country": "FR",
+      "question": "Which famous art museum is located in Paris?",
+      "answers": ["The Louvre", "The British Museum", "The Met", "The Hermitage"],
+      "correctAnswer": 0
+    },
+    {
+      "country": "FR",
+      "question": "What is the currency of France?",
+      "answers": ["Euro", "Dollar", "Pound", "Yen"],
+      "correctAnswer": 0
+    }, 
+    {
+        "country": "De",
+        "question": "Which river runs through Berlin?",
+        "answers": ["Seine", "Thames", "Spree", "Danube"],
+        "correctAnswer": 2
+      },
+      {
+        "country": "Es",
+        "question": "What is the official language of Spain?",
+        "answers": ["English", "French", "Spanish", "Italian"],
+        "correctAnswer": 2
+      },
+      {
+        "country": "It",
+        "question": "Which famous structure is located in Rome?",
+        "answers": ["The Colosseum", "The Eiffel Tower", "Big Ben", "The Parthenon"],
+        "correctAnswer": 0
+      },
+      {
+        "country": "Gr",
+        "question": "What is the currency of Greece?",
+        "answers": ["Euro", "Dollar", "Pound", "Drachma"],
+        "correctAnswer": 3
+      },
+      {
+        "country": "Pt",
+        "question": "Which ocean does Portugal border?",
+        "answers": ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Mediterranean Sea"],
+        "correctAnswer": 0
+      }
+] 
