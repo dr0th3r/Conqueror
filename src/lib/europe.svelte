@@ -133,14 +133,19 @@
     }
 
     function showQuestion(countryId) {
-        console.log(countryId)
+        countryId = countryId.toUpperCase();
 
-        if (!questions || questions.length < 1) {
+        if (!questions[countryId]) {
+            alert("Sorry, this country wasn't added yet.");
+            return;
+        }
+
+        if (!questions || Object.keys(questions).length < 1) {
             console.log("Questions failed to load");
             return;
         }
 
-        const countryQuestions = questions.filter((question) => question.country === countryId);
+        const countryQuestions = questions[countryId];
 
         if (countryQuestions.length < 1) {
             console.log("No country questions availiable.")
@@ -148,17 +153,17 @@
         }
 
 
-        currentQuestion = countryQuestions[Math.floor(Math.random() * countryQuestions.length)];
+        currentQuestion = {...countryQuestions[Math.floor(Math.random() * countryQuestions.length)], countryId: countryId};
     }
 
     function handleAnswer(correctAnswer) {
 
         if (correctAnswer) {
-            conquered = [...conquered, currentQuestion.country]
+            conquered = [...conquered, currentQuestion.countryId];
 
             console.log(conquered);
         } else {
-            alert("Wrogn")
+            alert("Wrong");
         }
 
         currentQuestion = null;
