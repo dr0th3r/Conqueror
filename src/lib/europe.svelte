@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
     import QuestionModal from "$lib/question_modal.svelte"
 
+    //handling data preparation for the map
+
     const europeMap = `
     <svg baseprofile="tiny" fill="#ececec" height="684" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1000" xmlns="http://www.w3.org/2000/svg">
         <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
@@ -102,17 +104,7 @@
         </circle>
     </svg>
     `
-
-    let questions = []
-    let currentQuestion = null;
-
-    onMount(async () => {
-        const jsonData = await fetch("./questions.json");
-        const data = await jsonData.json();
-
-        questions = data;
-    })
-
+    
     const includesD = /\sd=".+?"/
     const includesId = /id=".+?"/
     const includesName = /name=".+?"/
@@ -126,18 +118,40 @@
         }
     })
 
+    //fetching questions;
+
+    let questions = []
+    let currentQuestion = null;
+
+    onMount(async () => {
+        const jsonData = await fetch("./questions.json");
+        const data = await jsonData.json();
+
+        questions = data;
+    })
+
     let conquered = [];
+    let inviding= null;
 
     function startGame() {
-        conquered = [paths[Math.floor(Math.random() * paths.length)].id];
+        //conquered = [paths[Math.floor(Math.random() * paths.length)].id];
+        conquered = ["BE"]; //only DE and FR are added so it must be one of the neighbors of these countries otherwise i could invide none because other countries are not added yet
     }
 
     function showQuestion(countryId) {
         countryId = countryId.toUpperCase();
 
-        if (!questions[countryId]) {
+        const country = questions[countryId];
+
+        if (!country) {
             alert("Sorry, this country wasn't added yet.");
             return;
+        } 
+
+        inviding = country.neighbors.find(neighbor => conquered.includes(neighbor));
+
+        if (!inviding) {
+            alert("You must only invide countries that are neighbors of the countries you already conquered!")
         }
 
         if (!questions || Object.keys(questions).length < 1) {
@@ -145,28 +159,38 @@
             return;
         }
 
-        const countryQuestions = questions[countryId];
+        const countryQuestions = country.questions;
 
         if (countryQuestions.length < 1) {
             console.log("No country questions availiable.")
             return;
         }
 
-
         currentQuestion = {...countryQuestions[Math.floor(Math.random() * countryQuestions.length)], countryId: countryId};
     }
 
     function handleAnswer(correctAnswer) {
-
         if (correctAnswer) {
             conquered = [...conquered, currentQuestion.countryId];
 
             console.log(conquered);
+        } else if (!inviding) {
+            throw new Error("No country is inviding");
         } else {
-            alert("Wrong");
+            conquered = conquered.filter(country => country !== inviding);
         }
 
         currentQuestion = null;
+    }
+
+    $: if (conquered.length <= 0) {
+        setTimeout(() => alert("You lost!"), 0); //to first clean the dom and only then show alert
+        startGame();
+    }
+
+    $: if (conquered.length >= questions.length) {
+        setTimeout(() => alert("You won!"), 0); //to first clean the dom and only then show alert
+        startGame();
     }
 
     startGame();

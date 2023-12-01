@@ -1,56 +1,62 @@
 {
-  "FR": [
-    {
-      "question": "What is the capital city of France?",
-      "answers": ["Paris", "Lion", "Venice", "Prague"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "Which river runs through Paris?",
-      "answers": ["Seine", "Thames", "Danube", "Tiber"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "What is the official language of France?",
-      "answers": ["English", "French", "Spanish", "Italian"],
-      "correctAnswer": 1
-    },
-    {
-      "question": "Which famous art museum is located in Paris?",
-      "answers": ["The Louvre", "The British Museum", "The Met", "The Hermitage"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "What is the currency of France?",
-      "answers": ["Euro", "Dollar", "Pound", "Yen"],
-      "correctAnswer": 0
-    }
-  ],
-  "DE": [
-    {
-      "question": "What is the capital city of Germany?",
-      "answers": ["Berlin", "Madrid", "Paris", "Rome"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "Which river runs through Berlin?",
-      "answers": ["Seine", "Thames", "Spree", "Danube"],
-      "correctAnswer": 2
-    },
-    {
-      "question": "What is the official language of Germany?",
-      "answers": ["English", "German", "Spanish", "Italian"],
-      "correctAnswer": 1
-    },
-    {
-      "question": "Which famous castle is located in Germany?",
-      "answers": ["Neuschwanstein Castle", "Versailles", "Edinburgh Castle", "Prague Castle"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "What is the currency of Germany?",
-      "answers": ["Euro", "Dollar", "Pound", "Mark"],
-      "correctAnswer": 0
-    }
-  ]
+  "FR": {
+    "neighbors": ["BE", "LX", "DE", "IT", "ES"],
+    "questions": [
+      {
+        "question": "What is the capital city of France?",
+        "answers": ["Paris", "Lion", "Venice", "Prague"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river runs through Paris?",
+        "answers": ["Seine", "Thames", "Danube", "Tiber"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of France?",
+        "answers": ["English", "French", "Spanish", "Italian"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Which famous art museum is located in Paris?",
+        "answers": ["The Louvre", "The British Museum", "The Met", "The Hermitage"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of France?",
+        "answers": ["Euro", "Dollar", "Pound", "Yen"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "DE": {
+    "neighbors": ["FR", "BE", "NL", "CH", "AT"],
+    "questions": [
+      {
+        "question": "What is the capital city of Germany?",
+        "answers": ["Berlin", "Madrid", "Paris", "Rome"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river runs through Berlin?",
+        "answers": ["Seine", "Thames", "Spree", "Danube"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "What is the official language of Germany?",
+        "answers": ["English", "German", "Spanish", "Italian"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Which famous castle is located in Germany?",
+        "answers": ["Neuschwanstein Castle", "Versailles", "Edinburgh Castle", "Prague Castle"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Germany?",
+        "answers": ["Euro", "Dollar", "Pound", "Mark"],
+        "correctAnswer": 0
+      }
+    ]
+  }
 }
