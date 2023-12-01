@@ -58,5 +58,755 @@
         "correctAnswer": 0
       }
     ]
+  },
+  "ES": {
+    "neighbors": ["PT", "FR", "IT"],
+    "questions": [
+      {
+        "question": "What is the capital city of Spain?",
+        "answers": ["Madrid", "Barcelona", "Seville", "Valencia"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous architect is known for designing Sagrada Familia in Barcelona?",
+        "answers": ["Antoni Gaudí", "Frank Gehry", "Zaha Hadid", "I. M. Pei"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Spain?",
+        "answers": ["English", "French", "Spanish", "Italian"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "Which mountain range is located in the north of Spain?",
+        "answers": ["Alps", "Pyrenees", "Carpathians", "Apennines"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "What is the currency of Spain?",
+        "answers": ["Euro", "Dollar", "Pound", "Peseta"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "IT": {
+    "neighbors": ["FR", "CH", "AT", "SI"],
+    "questions": [
+      {
+        "question": "What is the capital city of Italy?",
+        "answers": ["Rome", "Milan", "Florence", "Venice"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous tower is located in Pisa?",
+        "answers": ["Eiffel Tower", "Leaning Tower", "Big Ben", "Burj Khalifa"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "What is the official language of Italy?",
+        "answers": ["English", "French", "Italian", "Spanish"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "Which river runs through Rome?",
+        "answers": ["Tiber", "Seine", "Danube", "Thames"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Italy?",
+        "answers": ["Euro", "Lira", "Dollar", "Pound"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "PT": {
+    "neighbors": ["ES"],
+    "questions": [
+      {
+        "question": "What is the capital city of Portugal?",
+        "answers": ["Lisbon", "Porto", "Faro", "Coimbra"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river runs through Lisbon?",
+        "answers": ["Tagus", "Douro", "Guadalquivir", "Tiber"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Portugal?",
+        "answers": ["English", "French", "Spanish", "Portuguese"],
+        "correctAnswer": 3
+      },
+      {
+        "question": "Which explorer is credited for the discovery of the sea route to India in the 15th century?",
+        "answers": ["Christopher Columbus", "Ferdinand Magellan", "Vasco da Gama", "Marco Polo"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "What is the currency of Portugal?",
+        "answers": ["Euro", "Dollar", "Escudo", "Pound"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "GB": {
+    "neighbors": ["IE", "FR", "BE", "NL"],
+    "questions": [
+      {
+        "question": "What is the capital city of the United Kingdom?",
+        "answers": ["London", "Manchester", "Edinburgh", "Dublin"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river runs through London?",
+        "answers": ["Thames", "Seine", "Danube", "Tiber"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of the United Kingdom?",
+        "answers": ["English", "French", "Spanish", "Irish"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous clock tower is located in London?",
+        "answers": ["Big Ben", "Eiffel Tower", "Leaning Tower", "Brandenburg Gate"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of the United Kingdom?",
+        "answers": ["Pound Sterling", "Euro", "Dollar", "Franc"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "NL": {
+    "neighbors": ["DE", "BE", "FR", "GB"],
+    "questions": [
+      {
+        "question": "What is the capital city of the Netherlands?",
+        "answers": ["Amsterdam", "Rotterdam", "The Hague", "Utrecht"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river runs through Amsterdam?",
+        "answers": ["Rhine", "Seine", "Danube", "Amstel"],
+        "correctAnswer": 3
+      },
+      {
+        "question": "What is the official language of the Netherlands?",
+        "answers": ["English", "French", "Dutch", "German"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "Which famous museum is located in Amsterdam?",
+        "answers": ["Rijksmuseum", "Louvre", "British Museum", "Hermitage"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of the Netherlands?",
+        "answers": ["Euro", "Guilder", "Dollar", "Pound"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "BE": {
+    "neighbors": ["FR", "NL", "DE", "LU"],
+    "questions": [
+      {
+        "question": "What is the capital city of Belgium?",
+        "answers": ["Brussels", "Antwerp", "Ghent", "Bruges"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which language is predominantly spoken in Brussels?",
+        "answers": ["Dutch", "French", "German", "Flemish"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "What is the official language of Belgium?",
+        "answers": ["Dutch", "French", "German", "Flemish"],
+        "correctAnswer": 3
+      },
+      {
+        "question": "Which famous Atomium structure is located in Brussels?",
+        "answers": ["Atomium", "Eiffel Tower", "Brandenburg Gate", "Leaning Tower"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Belgium?",
+        "answers": ["Euro", "Franc", "Dollar", "Guilder"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "SE": {
+    "neighbors": ["NO", "FI", "DK"],
+    "questions": [
+      {
+        "question": "What is the capital city of Sweden?",
+        "answers": ["Stockholm", "Oslo", "Helsinki", "Copenhagen"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which sea is to the east of Sweden?",
+        "answers": ["Baltic Sea", "North Sea", "Mediterranean Sea", "Black Sea"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Sweden?",
+        "answers": ["Swedish", "Norwegian", "Finnish", "Danish"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous Swedish pop group gained international fame in the 1970s?",
+        "answers": ["ABBA", "The Beatles", "Queen", "The Rolling Stones"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Sweden?",
+        "answers": ["Swedish Krona", "Euro", "Norwegian Krone", "Danish Krone"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "NO": {
+    "neighbors": ["SE", "FI"],
+    "questions": [
+      {
+        "question": "What is the capital city of Norway?",
+        "answers": ["Oslo", "Stockholm", "Helsinki", "Copenhagen"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which fjord is the longest in Norway?",
+        "answers": ["Sognefjord", "Geirangerfjord", "Hardangerfjord", "Oslofjord"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Norway?",
+        "answers": ["Norwegian", "Swedish", "Finnish", "Danish"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which outdoor sculpture park is located in Oslo?",
+        "answers": ["Vigeland Park", "Tivoli Gardens", "Ekebergparken", "Louvre Sculpture Garden"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Norway?",
+        "answers": ["Norwegian Krone", "Euro", "Swedish Krona", "Danish Krone"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "FI": {
+    "neighbors": ["SE", "NO", "RU"],
+    "questions": [
+      {
+        "question": "What is the capital city of Finland?",
+        "answers": ["Helsinki", "Stockholm", "Oslo", "Copenhagen"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which gulf is to the south of Finland?",
+        "answers": ["Gulf of Bothnia", "Gulf of Finland", "Gulf of Riga", "Gulf of Cadiz"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "What is the official language of Finland?",
+        "answers": ["Finnish", "Swedish", "Norwegian", "Danish"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous architect designed many buildings in Helsinki, including the Finlandia Hall?",
+        "answers": ["Alvar Aalto", "Frank Lloyd Wright", "Zaha Hadid", "Le Corbusier"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Finland?",
+        "answers": ["Euro", "Finnish Markka", "Swedish Krona", "Norwegian Krone"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "RU": {
+    "neighbors": ["NO", "FI", "EE", "LV", "LT", "PL", "BY", "UA", "KZ", "MN", "CN"],
+    "questions": [
+      {
+        "question": "What is the capital city of Russia?",
+        "answers": ["Moscow", "St. Petersburg", "Kiev", "Minsk"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Moscow?",
+        "answers": ["Volga", "Danube", "Moskva", "Don"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "What is the official language of Russia?",
+        "answers": ["Russian", "Ukrainian", "Belarusian", "Kazakh"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous cathedral is located in St. Petersburg?",
+        "answers": ["Saint Basil's Cathedral", "Kazan Cathedral", "Peter and Paul Cathedral", "St. Isaac's Cathedral"],
+        "correctAnswer": 3
+      },
+      {
+        "question": "What is the currency of Russia?",
+        "answers": ["Russian Ruble", "Euro", "US Dollar", "Kazakhstani Tenge"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "PL": {
+    "neighbors": ["DE", "CZ", "SK", "UA", "BY", "LT"],
+    "questions": [
+      {
+        "question": "What is the capital city of Poland?",
+        "answers": ["Warsaw", "Krakow", "Gdansk", "Wroclaw"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Warsaw?",
+        "answers": ["Vistula", "Oder", "Danube", "Elbe"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Poland?",
+        "answers": ["Polish", "Czech", "Slovak", "Hungarian"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which former royal palace is located in the Old Town of Warsaw?",
+        "answers": ["Wilanow Palace", "Wawel Castle", "Royal Castle", "Buda Castle"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "What is the currency of Poland?",
+        "answers": ["Polish Zloty", "Euro", "Czech Koruna", "Hungarian Forint"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "CZ": {
+    "neighbors": ["DE", "AT", "SK", "PL"],
+    "questions": [
+      {
+        "question": "What is the capital city of the Czech Republic?",
+        "answers": ["Prague", "Bratislava", "Vienna", "Budapest"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Prague?",
+        "answers": ["Vltava", "Elbe", "Danube", "Tisza"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of the Czech Republic?",
+        "answers": ["Czech", "Slovak", "Hungarian", "German"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous castle is located in Prague?",
+        "answers": ["Prague Castle", "Hofburg", "Hradcany Castle", "Buda Castle"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of the Czech Republic?",
+        "answers": ["Czech Koruna", "Euro", "Polish Zloty", "Austrian Dollar"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "AT": {
+    "neighbors": ["DE", "CZ", "SK", "HU", "SI", "IT", "CH", "LI"],
+    "questions": [
+      {
+        "question": "What is the capital city of Austria?",
+        "answers": ["Vienna", "Salzburg", "Innsbruck", "Graz"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Vienna?",
+        "answers": ["Danube", "Rhine", "Elbe", "Inn"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Austria?",
+        "answers": ["German", "Hungarian", "Czech", "Slovak"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous palace is located in Vienna?",
+        "answers": ["Schönbrunn Palace", "Hofburg", "Belvedere Palace", "Mirabell Palace"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Austria?",
+        "answers": ["Euro", "Austrian Schilling", "Swiss Franc", "Deutsche Mark"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "HU": {
+    "neighbors": ["AT", "SK", "SI", "HR", "RS", "RO", "UA"],
+    "questions": [
+      {
+        "question": "What is the capital city of Hungary?",
+        "answers": ["Budapest", "Vienna", "Prague", "Bratislava"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Budapest?",
+        "answers": ["Danube", "Tisza", "Elbe", "Vltava"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Hungary?",
+        "answers": ["Hungarian", "Czech", "Slovak", "German"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous thermal bath is located in Budapest?",
+        "answers": ["Gellért Baths", "Széchenyi Baths", "Blue Lagoon", "Terme di Caracalla"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "What is the currency of Hungary?",
+        "answers": ["Hungarian Forint", "Euro", "Czech Koruna", "Austrian Schilling"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "SI": {
+    "neighbors": ["AT", "IT", "HR", "HU"],
+    "questions": [
+      {
+        "question": "What is the capital city of Slovenia?",
+        "answers": ["Ljubljana", "Zagreb", "Vienna", "Budapest"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Ljubljana?",
+        "answers": ["Ljubljanica", "Sava", "Drava", "Danube"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Slovenia?",
+        "answers": ["Slovenian", "Croatian", "German", "Hungarian"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which picturesque lake is located in Slovenia?",
+        "answers": ["Lake Bled", "Lake Geneva", "Lake Como", "Lake Constance"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Slovenia?",
+        "answers": ["Euro", "Slovenian Tolar", "Croatian Kuna", "Austrian Schilling"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "CH": {
+    "neighbors": ["DE", "AT", "LI", "IT", "FR"],
+    "questions": [
+      {
+        "question": "What is the capital city of Switzerland?",
+        "answers": ["Bern", "Zurich", "Geneva", "Lucerne"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Zurich?",
+        "answers": ["Limmat", "Aare", "Rhine", "Seine"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Switzerland?",
+        "answers": ["German", "French", "Italian", "Romansh"],
+        "correctAnswer": 3
+      },
+      {
+        "question": "Which famous mountain is located in Switzerland?",
+        "answers": ["Matterhorn", "Mont Blanc", "Eiger", "Jungfrau"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Switzerland?",
+        "answers": ["Swiss Franc", "Euro", "Pound Sterling", "Dollar"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "LI": {
+    "neighbors": ["AT", "CH"],
+    "questions": [
+      {
+        "question": "What is the capital city of Liechtenstein?",
+        "answers": ["Vaduz", "Schaan", "Balzers", "Triesen"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Liechtenstein?",
+        "answers": ["Rhine", "Danube", "Aare", "Inn"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Liechtenstein?",
+        "answers": ["German", "French", "Italian", "Romansh"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which neighboring country is completely landlocked by Liechtenstein?",
+        "answers": ["Switzerland", "Austria", "Germany", "Italy"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Liechtenstein?",
+        "answers": ["Swiss Franc", "Euro", "Liechtenstein Franc", "Pound Sterling"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "HR": {
+    "neighbors": ["SI", "HU", "RS", "BA"],
+    "questions": [
+      {
+        "question": "What is the capital city of Croatia?",
+        "answers": ["Zagreb", "Split", "Dubrovnik", "Rijeka"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which sea is to the west of Croatia?",
+        "answers": ["Adriatic Sea", "Mediterranean Sea", "Ionian Sea", "Aegean Sea"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Croatia?",
+        "answers": ["Croatian", "Slovenian", "Serbian", "Bosnian"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which historic palace is located in the heart of Split?",
+        "answers": ["Diocletian's Palace", "Alhambra", "Versailles", "Hofburg"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Croatia?",
+        "answers": ["Croatian Kuna", "Euro", "Serbian Dinar", "Bosnian Convertible Mark"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "RS": {
+    "neighbors": ["HR", "BA", "ME", "MK", "AL", "BU", "RO", "HU"],
+    "questions": [
+      {
+        "question": "What is the capital city of Serbia?",
+        "answers": ["Belgrade", "Novi Sad", "Nis", "Subotica"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Belgrade?",
+        "answers": ["Danube", "Sava", "Tisa", "Morava"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "What is the official language of Serbia?",
+        "answers": ["Serbian", "Croatian", "Bosnian", "Montenegrin"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which historic fortress is located in Belgrade?",
+        "answers": ["Kalemegdan Fortress", "Acropolis", "Wawel Castle", "Alcazar"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Serbia?",
+        "answers": ["Serbian Dinar", "Euro", "Croatian Kuna", "Bosnian Convertible Mark"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "BA": {
+    "neighbors": ["HR", "RS", "ME", "RS"],
+    "questions": [
+      {
+        "question": "What is the capital city of Bosnia and Herzegovina?",
+        "answers": ["Sarajevo", "Banja Luka", "Mostar", "Tuzla"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which river flows through Sarajevo?",
+        "answers": ["Miljacka", "Neretva", "Una", "Sava"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Bosnia and Herzegovina?",
+        "answers": ["Bosnian", "Serbian", "Croatian", "Montenegrin"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which historic bridge is located in Mostar?",
+        "answers": ["Stari Most", "Charles Bridge", "Tower Bridge", "Brooklyn Bridge"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Bosnia and Herzegovina?",
+        "answers": ["Bosnian Convertible Mark", "Euro", "Serbian Dinar", "Croatian Kuna"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "ME": {
+    "neighbors": ["HR", "BA", "RS", "AL"],
+    "questions": [
+      {
+        "question": "What is the capital city of Montenegro?",
+        "answers": ["Podgorica", "Kotor", "Budva", "Herceg Novi"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which Adriatic city is known for its well-preserved medieval old town?",
+        "answers": ["Kotor", "Dubrovnik", "Rovinj", "Split"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Montenegro?",
+        "answers": ["Montenegrin", "Serbian", "Croatian", "Bosnian"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which national park is located in Montenegro and known for its stunning landscapes?",
+        "answers": ["Durmitor National Park", "Plitvice Lakes National Park", "Krka National Park", "Brijuni National Park"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Montenegro?",
+        "answers": ["Euro", "Montenegrin Perper", "Serbian Dinar", "Bosnian Convertible Mark"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "MK": {
+    "neighbors": ["RS", "BG", "AL", "GR"],
+    "questions": [
+      {
+        "question": "What is the capital city of North Macedonia?",
+        "answers": ["Skopje", "Ohrid", "Bitola", "Prilep"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which lake is located near the city of Ohrid?",
+        "answers": ["Lake Ohrid", "Lake Bled", "Lake Geneva", "Lake Como"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of North Macedonia?",
+        "answers": ["Macedonian", "Albanian", "Serbian", "Bulgarian"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous historical figure from North Macedonia is known as the conqueror of Persia?",
+        "answers": ["Alexander the Great", "Cleopatra", "Julius Caesar", "Genghis Khan"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of North Macedonia?",
+        "answers": ["Macedonian Denar", "Euro", "Serbian Dinar", "Bulgarian Lev"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "AL": {
+    "neighbors": ["ME", "MK", "GR"],
+    "questions": [
+      {
+        "question": "What is the capital city of Albania?",
+        "answers": ["Tirana", "Durres", "Shkoder", "Vlore"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which sea is to the west of Albania?",
+        "answers": ["Adriatic Sea", "Mediterranean Sea", "Ionian Sea", "Aegean Sea"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Albania?",
+        "answers": ["Albanian", "Serbian", "Macedonian", "Greek"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which castle is located on a hill overlooking the city of Shkoder?",
+        "answers": ["Rozafa Castle", "Himara Castle", "Gjirokaster Castle", "Berat Castle"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Albania?",
+        "answers": ["Albanian Lek", "Euro", "Serbian Dinar", "Greek Drachma"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "GR": {
+    "neighbors": ["AL", "MK", "BG", "TR"],
+    "questions": [
+      {
+        "question": "What is the capital city of Greece?",
+        "answers": ["Athens", "Thessaloniki", "Heraklion", "Patras"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which ancient citadel is located on the Acropolis hill in Athens?",
+        "answers": ["Parthenon", "Colosseum", "Pantheon", "Hagia Sophia"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Greece?",
+        "answers": ["Greek", "Albanian", "Macedonian", "Turkish"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which island, known for its black sand beaches, is the largest in Greece?",
+        "answers": ["Crete", "Santorini", "Rhodes", "Corfu"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Greece?",
+        "answers": ["Euro", "Greek Drachma", "Turkish Lira", "Bulgarian Lev"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  "DK": {
+    "neighbors": ["DE", "SE"],
+    "questions": [
+      {
+        "question": "What is the capital city of Denmark?",
+        "answers": ["Copenhagen", "Oslo", "Stockholm", "Helsinki"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which strait separates Denmark and Sweden?",
+        "answers": ["Øresund", "English Channel", "Baltic Sea", "North Sea"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the official language of Denmark?",
+        "answers": ["Danish", "Swedish", "Norwegian", "Finnish"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Which famous amusement park is located in Copenhagen?",
+        "answers": ["Tivoli Gardens", "Europa Park", "Disneyland Paris", "Alton Towers"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "What is the currency of Denmark?",
+        "answers": ["Danish Krone", "Euro", "Swedish Krona", "Norwegian Krone"],
+        "correctAnswer": 0
+      }
+    ]
   }
 }

@@ -134,8 +134,11 @@
     let inviding= null;
 
     function startGame() {
-        //conquered = [paths[Math.floor(Math.random() * paths.length)].id];
-        conquered = ["BE"]; //only DE and FR are added so it must be one of the neighbors of these countries otherwise i could invide none because other countries are not added yet
+        const countries = Object.keys(questions);
+
+        conquered = countries.length > 0 
+            ? [countries[Math.floor(Math.random() * countries.length)]] 
+            : ["BE"] //fallback value = "Belgium"
     }
 
     function showQuestion(countryId) {
@@ -151,7 +154,8 @@
         inviding = country.neighbors.find(neighbor => conquered.includes(neighbor));
 
         if (!inviding) {
-            alert("You must only invide countries that are neighbors of the countries you already conquered!")
+            alert("You must only invide countries that are neighbors of the countries you already conquered!");
+            return;
         }
 
         if (!questions || Object.keys(questions).length < 1) {
@@ -188,13 +192,12 @@
         startGame();
     }
 
-    $: if (conquered.length >= questions.length) {
+    $: if (questions.length > 0 && conquered.length >= questions.length) {
         setTimeout(() => alert("You won!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
 
-    startGame();
-
+startGame();
 
 </script>
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
