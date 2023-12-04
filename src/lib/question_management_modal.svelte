@@ -15,7 +15,11 @@
     function createSet() {
         // Add your logic to create a new set
         // For example, you can push a new set to the 'sets' array
-        sets = [...sets, { title: `New Set ${sets.length + 1}` }];
+        //sets = [...sets, { title: `New Set ${sets.length + 1}` }];
+        questions.update(prev => ({
+            ...prev,
+            state: "creatingNewMap"
+        }))
     }
 
     function chooseSet(index) {
@@ -32,10 +36,7 @@
     function handleFileUpload(e) {
             questions.update(prev => ({
                 ...prev,
-                state: {
-                    ...prev.state,
-                    loading: true
-                }
+                state: "loading"
             }))
 
             const {files} = e.target;
@@ -45,10 +46,7 @@
                 if (Object.keys(selected).length > 1){
                     questions.set({
                         countryQuestions: selected, 
-                        state: {
-                            ...$questions.state,
-                            loading: false
-                        }
+                        state: "playing"
                     })
                     showModal = false; //close modal because you have already choose a set
                 } else {
@@ -58,8 +56,39 @@
             fileReader.onerror = err => console.log(err);
             fileReader.readAsText(files[0]); //only read the first file and ignore others
     }
+
+    $: showModal && questions.update(prev => ({...prev, state: "managing"})) //when we open the modal, we always want to be in the managing window
+
+    $: state = $questions.state
+
+
+    //creating new questions
+    let newQuestion = {
+        question: "",
+        answers: [],
+        correctAnswer: 0,
+    }
+
+    function addQuestion() {
+        //add better form checking later
+        //add better for checking messages later
+        if (newQuestion.question === "" || answers.length < 4) {
+            console.log("invalid question");
+            return;
+        }
+
+        const correctAnswer = newQuestion.answers[3];
+        //shufle answers
+        newQuestion.answers.sort(() => Math.random() - 0.5);
+        //set the new index of the correct answer as it's no longer 4th element
+        newQuestion.correctAnswer = newQuestion.answers.indexOf(correctAnswer);
+
+        
+    }
+
 </script>
 
+{#if state === "managing"}
 <div class="modal" style:display={showModal ? "flex" : "none"}>
     <div class="modal-content">
         <header class="modal-header">
@@ -91,6 +120,24 @@
         {/if}
     </div>
 </div>
+<!-- {:else if state === "creatingNewMap"}
+<button class="save-new-set-button" on:click={() => questions.update(prev => ({
+    ...prev,
+    state: "managing"
+}))}>Save</button> -->
+{:else if state === "creatingNewMenu"}
+<div class="modal" style:display={showModal ? "flex" : "none"}>
+    <div class="modal-content column">
+        <input type="text" placeholder="Question..." bind:value={newQuestion.question} required>
+        <input type="text" placeholder="Answer1..." bind:value={newQuestion.answers[0]} required>
+        <input type="text" placeholder="Answer2..." bind:value={newQuestion.answers[0]} required>
+        <input type="text" placeholder="Answer3..." bind:value={newQuestion.answers[0]} required>
+        <input type="text" placeholder="Answer4... Correct Answer" bind:value={newQuestion.answers[0]} required>
+        <button class="set button add-question-button" on:click={addQuestion}>Add Question</button>
+        <button class="set button discard-button">Discard</button>
+    </div>
+</div>
+{/if}
   
 <style>
     /* Add your styles here */
@@ -188,5 +235,38 @@
     #from-file-input {
         display: none;
     }
+
+    .save-new-set-button {
+        align-self: flex-end;
+        margin-right: 20px;
+        background-color: #8d0707;
+        border: none;
+        color: #f0f0f0;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .column {
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+    }
     
+    .column input {
+        padding: 5px;
+    }
+
+    .column button {
+        margin: 0;
+        cursor: pointer;
+        color: #f0f0f0;
+    }
+
+    .add-question-button {
+        background-color: #2ecc71;
+    }
+
+    .discard-button {
+        background-color: #8d0707;
+    }
     </style>

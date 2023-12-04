@@ -125,20 +125,14 @@
         if (Object.keys($questions.countryQuestions).length < 2) { //fetch fallback/default questions
             questions.update(prev => ({
                 ...prev, 
-                state: {
-                    ...prev.state,
-                    loading: true
-                }
+                state: "loading"
             }))
 
             const jsonData = await fetch("./questions.json"); 
             const data = await jsonData.json();
             questions.set({
                 countryQuestions: data,
-                state: {
-                    ...$questions.state,
-                    loading: false,
-                }
+                state: "playing"
             });
         }
         //questions = data;
@@ -176,7 +170,7 @@
             return;
         }
 
-        if (!questions || $questions.state.loading || Object.keys($questions.countryQuestions).length < 1) {
+        if (!questions || $questions.state === "loading" || Object.keys($questions.countryQuestions).length < 1) {
             console.log("Questions failed to load");
             return;
         }
@@ -206,14 +200,14 @@
     }
 
 
-    $: if (!$questions.state.loading && Object.keys($questions?.countryQuestions).length > 1) startGame();
+    $: if ($questions.state === "playing" && Object.keys($questions?.countryQuestions).length > 1) startGame();
 
     $: if (conquered?.length <= 0) {
         setTimeout(() => alert("You lost!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
 
-    $: if (!$questions.state.loading && conquered.length >= Object.keys($questions.countryQuestions).length) {
+    $: if ($questions.state === "playing" && conquered.length >= Object.keys($questions.countryQuestions).length) {
         setTimeout(() => alert("You won!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
@@ -225,15 +219,18 @@
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
     {#each paths as path, id (id)}
         {@const isConquered = conquered.includes(path.id)}
+        {@const fillColor = $questions.state !== "playing" ? path.color
+            : isConquered ? "green" : path.color
+        }
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <path 
             d={path.d} 
             id={path.id} 
             name={path.name} 
-            fill={isConquered ? "green" : path.color} 
+            fill={fillColor} 
         on:mouseenter={() => {
-            path.color = "red";
+            path.color = $questions.state !== "playing" ? "blue" : "red";
             path = path; //for svelte to react
         }}
         on:mouseleave={() => {
@@ -241,9 +238,16 @@
             path = path;
         }}
         on:click={() => {
-            isConquered && console.log("Already conquered");
-
-            !isConquered && showQuestion(path.id);
+            if ($questions.state === "creatingNewMap") {
+                questions.update(prev => ({
+                    ...prev,
+                    state: "creatingNewMenu"
+                }))
+            } else {                
+                isConquered && console.log("Already conquered");
+    
+                !isConquered && showQuestion(path.id);
+            }
         }}
         ></path>
     {/each}
