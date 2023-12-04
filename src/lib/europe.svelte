@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import QuestionModal from "$lib/question_modal.svelte"
+    import {questions} from "./stores";
 
     //handling data preparation for the map
 
@@ -120,31 +121,38 @@
 
     //fetching questions;
 
-    let questions = []
+    //let questions = []
     let currentQuestion = null;
 
     onMount(async () => {
-        const jsonData = await fetch("./questions.json");
-        const data = await jsonData.json();
-
-        questions = data;
+        if (Object.keys($questions).length < 1) {
+            const jsonData = await fetch("./questions.json");
+            const data = await jsonData.json();
+            questions.set(data);
+        }
+        //questions = data;
     })
 
-    let conquered = [];
+
+    let conquered = ["BE"]; //fallback value
     let inviding= null;
 
     function startGame() {
-        const countries = Object.keys(questions);
+        console.log($questions);
+
+        const countries = Object.keys($questions);
 
         conquered = countries.length > 0 
             ? [countries[Math.floor(Math.random() * countries.length)]] 
             : ["BE"] //fallback value = "Belgium"
+
+        console.log(conquered);
     }
 
     function showQuestion(countryId) {
         countryId = countryId.toUpperCase();
 
-        const country = questions[countryId];
+        const country = $questions[countryId];
 
         if (!country) {
             alert("Sorry, this country wasn't added yet.");
@@ -158,7 +166,7 @@
             return;
         }
 
-        if (!questions || Object.keys(questions).length < 1) {
+        if (!$questions || Object.keys($questions).length < 1) {
             console.log("Questions failed to load");
             return;
         }
@@ -187,19 +195,22 @@
         currentQuestion = null;
     }
 
+    $: if (Object.keys($questions).length > 0) startGame();
+
     $: if (conquered.length <= 0) {
         setTimeout(() => alert("You lost!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
 
-    $: if (questions.length > 0 && conquered.length >= questions.length) {
+    $: if (Object.keys($questions).length > 0 && conquered.length >= Object.keys($questions).length) {
         setTimeout(() => alert("You won!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
 
-startGame();
 
 </script>
+
+
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
     {#each paths as path, id (id)}
         {@const isConquered = conquered.includes(path.id)}

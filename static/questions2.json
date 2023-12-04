@@ -1,0 +1,62 @@
+{
+    "FR": {
+        "neighbors": ["BE", "LX", "DE", "IT", "ES"],
+        "questions": [
+            {
+              "question": "What is the capital city of France?",
+              "answers": ["Paris", "Lion", "Venice", "Prague"],
+              "correctAnswer": 0
+            },
+            {
+              "question": "Which river runs through Paris?",
+              "answers": ["Seine", "Thames", "Danube", "Tiber"],
+              "correctAnswer": 0
+            },
+            {
+              "question": "What is the official language of France?",
+              "answers": ["English", "French", "Spanish", "Italian"],
+              "correctAnswer": 1
+            },
+            {
+              "question": "Which famous art museum is located in Paris?",
+              "answers": ["The Louvre", "The British Museum", "The Met", "The Hermitage"],
+              "correctAnswer": 0
+            },
+            {
+              "question": "What is the currency of France?",
+              "answers": ["Euro", "Dollar", "Pound", "Yen"],
+              "correctAnswer": 0
+            }
+          ]
+    },
+    "DK": {
+      "neighbors": ["DE", "SE"],
+      "questions": [
+        {
+          "question": "What is the capital city of Denmark?",
+          "answers": ["Copenhagen", "Oslo", "Stockholm", "Helsinki"],
+          "correctAnswer": 0
+        },
+        {
+          "question": "Which strait separates Denmark and Sweden?",
+          "answers": ["Øresund", "English Channel", "Baltic Sea", "North Sea"],
+          "correctAnswer": 0
+        },
+        {
+          "question": "What is the official language of Denmark?",
+          "answers": ["Danish", "Swedish", "Norwegian", "Finnish"],
+          "correctAnswer": 0
+        },
+        {
+          "question": "Which famous amusement park is located in Copenhagen?",
+          "answers": ["Tivoli Gardens", "Europa Park", "Disneyland Paris", "Alton Towers"],
+          "correctAnswer": 0
+        },
+        {
+          "question": "What is the currency of Denmark?",
+          "answers": ["Danish Krone", "Euro", "Swedish Krona", "Norwegian Krone"],
+          "correctAnswer": 0
+        }
+      ]
+    }
+}

@@ -22,16 +22,17 @@
     :global(body) {
         background-color: #121212;
         height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
     main {
-        height: 100%;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-
+        flex-grow: 1;
         gap: 1rem;
     }
 

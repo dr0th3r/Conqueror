@@ -9,7 +9,7 @@
     </header>
     <main>
         {#each question.answers as answer, id}
-            <button on:click={() => handleAnswer(question.correctAnswer === id)}>{answer}</button>
+            <button on:click|self={() => handleAnswer(question.correctAnswer === id)}>{answer}</button>
         {/each}
     </main>
 </div>
