@@ -30,12 +30,26 @@
     }
 
     function handleFileUpload(e) {
+            questions.update(prev => ({
+                ...prev,
+                state: {
+                    ...prev.state,
+                    loading: true
+                }
+            }))
+
             const {files} = e.target;
             const fileReader = new FileReader();
             fileReader.onload = async (e) => {
                 const selected = await JSON.parse(e.target.result);
                 if (Object.keys(selected).length > 1){
-                    questions.set(selected);
+                    questions.set({
+                        countryQuestions: selected, 
+                        state: {
+                            ...$questions.state,
+                            loading: false
+                        }
+                    })
                     showModal = false; //close modal because you have already choose a set
                 } else {
                     alert("You must questions about at least 2 countries!");

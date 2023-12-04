@@ -119,20 +119,30 @@
         }
     })
 
-    //fetching questions;
-
-    //let questions = []
     let currentQuestion = null;
 
     onMount(async () => {
-        if (Object.keys($questions).length < 1) {
-            const jsonData = await fetch("./questions.json");
+        if (Object.keys($questions.countryQuestions).length < 2) { //fetch fallback/default questions
+            questions.update(prev => ({
+                ...prev, 
+                state: {
+                    ...prev.state,
+                    loading: true
+                }
+            }))
+
+            const jsonData = await fetch("./questions.json"); 
             const data = await jsonData.json();
-            questions.set(data);
+            questions.set({
+                countryQuestions: data,
+                state: {
+                    ...$questions.state,
+                    loading: false,
+                }
+            });
         }
         //questions = data;
     })
-
 
     let conquered = ["BE"]; //fallback value
     let inviding= null;
@@ -140,7 +150,7 @@
     function startGame() {
         console.log($questions);
 
-        const countries = Object.keys($questions);
+        const countries = Object.keys($questions.countryQuestions);
 
         conquered = countries.length > 0 
             ? [countries[Math.floor(Math.random() * countries.length)]] 
@@ -152,7 +162,7 @@
     function showQuestion(countryId) {
         countryId = countryId.toUpperCase();
 
-        const country = $questions[countryId];
+        const country = $questions.countryQuestions[countryId];
 
         if (!country) {
             alert("Sorry, this country wasn't added yet.");
@@ -166,7 +176,7 @@
             return;
         }
 
-        if (!$questions || Object.keys($questions).length < 1) {
+        if (!questions || $questions.state.loading || Object.keys($questions.countryQuestions).length < 1) {
             console.log("Questions failed to load");
             return;
         }
@@ -195,14 +205,15 @@
         currentQuestion = null;
     }
 
-    $: if (Object.keys($questions).length > 0) startGame();
 
-    $: if (conquered.length <= 0) {
+    $: if (!$questions.state.loading && Object.keys($questions?.countryQuestions).length > 1) startGame();
+
+    $: if (conquered?.length <= 0) {
         setTimeout(() => alert("You lost!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
 
-    $: if (Object.keys($questions).length > 0 && conquered.length >= Object.keys($questions).length) {
+    $: if (!$questions.state.loading && conquered.length >= Object.keys($questions.countryQuestions).length) {
         setTimeout(() => alert("You won!"), 0); //to first clean the dom and only then show alert
         startGame();
     }
