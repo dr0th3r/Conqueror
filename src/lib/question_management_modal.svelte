@@ -13,6 +13,7 @@
     let filter = "";
 
     let creatingNewSet = false;
+    let newSetName = "";
 
     function createSet() {
         // Add your logic to create a new set
@@ -22,7 +23,9 @@
             ...prev,
             state: "creatingNewMap"
         })) */
-        $questions.state = "creatingNewMap"
+        $questions.newSetName = newSetName;
+        $questions.state = "creatingNewMap";
+        creatingNewSet = false;
     }
 
     function chooseSet(title) {
@@ -100,7 +103,7 @@
 
         {#if creatingNewSet}
             <div class="creating-new-container">
-                <input placeholder="Set name..." class="filter-input">
+                <input placeholder="Set name..." class="filter-input" bind:value={newSetName}>
                 <button class="set button choose-button" on:click={createSet}>Create</button>
             </div>
         {:else if Object.keys($questions.sets).length > 0}

@@ -105,6 +105,8 @@
         </circle>
     </svg>
     `
+
+    let neighborCountries = {}
     
     const includesD = /\sd=".+?"/
     const includesId = /id=".+?"/
@@ -138,6 +140,15 @@
                 }
             });
         }
+
+        if (Object.keys(neighborCountries).length < 1) {
+            const jsonData = await fetch("./neighbors.json");
+            const data = await jsonData.json();
+
+            neighborCountries = data;
+
+            console.log(neighborCountries);
+        }
         //questions = data;
     })
 
@@ -159,14 +170,23 @@
     function showQuestion(countryId) {
         countryId = countryId.toUpperCase();
 
-        const country = $questions.countryQuestions[countryId];
+        let countryQuestions = $questions.countryQuestions[countryId];
 
-        if (!country) {
+
+        console.log(countryQuestions.neighbors)
+
+        if (countryQuestions.neighbors) { //for backwards compatibility
+            countryQuestions = countryQuestions.questions
+        }
+
+
+
+        if (!countryQuestions || countryQuestions.length < 1) {
             alert("Sorry, this country wasn't added yet.");
             return;
         } 
 
-        inviding = country.neighbors.find(neighbor => conquered.includes(neighbor));
+        inviding = neighborCountries[countryId].find(neighbor => conquered.includes(neighbor));
 
         if (!inviding) {
             alert("You must only invide countries that are neighbors of the countries you already conquered!");
@@ -178,14 +198,14 @@
             return;
         }
 
-        const countryQuestions = country.questions;
-
         if (countryQuestions.length < 1) {
             console.log("No country questions availiable.")
             return;
         }
 
         currentQuestion = {...countryQuestions[Math.floor(Math.random() * countryQuestions.length)], countryId: countryId};
+    
+        console.log($questions.countryQuestions[countryId]);
     }
 
     function handleAnswer(correctAnswer) {
@@ -217,13 +237,15 @@
 
     //creating new questions
 
-    const newQuestion = {
+    let countryOfQuestions = ""
+
+    let newQuestion = {
         question: "What is the longest river in ...?",
         answers: ["", "", "", ""],
-        correctAnswer: 3
+        correctAnswer: 3,
+        neighbors: []
     };
 
-    const newQuestions = {};
 
     function addQuestion() {
         //shuffle answers
@@ -231,19 +253,55 @@
         newQuestion.answers = newQuestion.answers.sort(() => Math.random() - 0.5);
         newQuestion.correctAnswer = newQuestion.answers.indexOf(correctAnswer);
 
+
+        if ($questions.newSetName === "") {
+            throw new Error("Not creating any new set")
+        }
+
+        const newSetName = $questions.newSetName
+
+        if (!$questions.sets[newSetName]) {
+            $questions.sets[newSetName] = {};
+        }
+
+        if ($questions.sets[newSetName][countryOfQuestions]) {
+            $questions.sets[newSetName][countryOfQuestions] = [
+                ...$questions.sets[newSetName][countryOfQuestions],
+                {
+                    question: newQuestion.question,
+                    answers: structuredClone(newQuestion.answers), //we need deep copy
+                    correctAnswer: newQuestion.correctAnswer
+                }
+            ]
+        } else {
+            $questions.sets[newSetName][countryOfQuestions] = [
+                {
+                    question: newQuestion.question,
+                    answers: structuredClone(newQuestion.answers), //we need deep copy
+                    correctAnswer: newQuestion.correctAnswer
+                }
+            ]
+        }
+
+
+        newQuestion = {
+            question: "What is the longest river in ...?",
+            answers: ["", "", "", ""],
+            correctAnswer: 3
+        };
+
         $questions.state = "creatingNewMap"
     }
 
-    function saveNewSet() {
-        if ($questions.newSetName !== "") {
-            console.log($questions.newSetName);
-        }
+    function backToMenu() {
+        $questions.state = "managing"
+        $questions.newSetName = "";
     }
 
 </script>
 
 {#if $questions.state.includes("creatingNew")}
-    <button class="save-new-set-button" on:click={saveNewSet}>Save</button>
+    <button class="save-new-set-button" on:click={backToMenu}>Back To Menu</button>
 {/if}
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
     {#each paths as path, id (id)}
@@ -268,10 +326,8 @@
         }}
         on:click={() => {
             if ($questions.state === "creatingNewMap") {
-                questions.update(prev => ({
-                    ...prev,
-                    state: "creatingNewMenu"
-                }))
+                $questions.state = "creatingNewMenu"
+                countryOfQuestions = path.id
             } else {                
                 isConquered && console.log("Already conquered");
     
