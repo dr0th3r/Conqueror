@@ -132,7 +132,10 @@
             const data = await jsonData.json();
             questions.set({
                 countryQuestions: data,
-                state: "playing"
+                state: "playing",
+                sets: {
+                    "Default": data
+                }
             });
         }
         //questions = data;
@@ -212,10 +215,36 @@
         startGame();
     }
 
+    //creating new questions
+
+    const newQuestion = {
+        question: "What is the longest river in ...?",
+        answers: ["", "", "", ""],
+        correctAnswer: 3
+    };
+
+    const newQuestions = {};
+
+    function addQuestion() {
+        //shuffle answers
+        const correctAnswer = newQuestion.answers[3]; //saved so that we can find the correct answer in the shuffled array
+        newQuestion.answers = newQuestion.answers.sort(() => Math.random() - 0.5);
+        newQuestion.correctAnswer = newQuestion.answers.indexOf(correctAnswer);
+
+        $questions.state = "creatingNewMap"
+    }
+
+    function saveNewSet() {
+        if ($questions.newSetName !== "") {
+            console.log($questions.newSetName);
+        }
+    }
 
 </script>
 
-
+{#if $questions.state.includes("creatingNew")}
+    <button class="save-new-set-button" on:click={saveNewSet}>Save</button>
+{/if}
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
     {#each paths as path, id (id)}
         {@const isConquered = conquered.includes(path.id)}
@@ -230,7 +259,7 @@
             name={path.name} 
             fill={fillColor} 
         on:mouseenter={() => {
-            path.color = $questions.state !== "playing" ? "blue" : "red";
+            path.color = ($questions.state !== "playing" && $questions.state !== "loading") ? "blue" : "red";
             path = path; //for svelte to react
         }}
         on:mouseleave={() => {
@@ -258,6 +287,20 @@
     <circle cx="521" cy="266.6" id="2">
     </circle>
 </svg>
+{#if $questions.state === "creatingNewMenu"}
+<div class="modal">
+    <form class="modal-content column" on:submit|preventDefault={addQuestion}>
+        <textarea type="text" bind:value={newQuestion.question} required></textarea>
+        <input type="text" placeholder="Answer1..." bind:value={newQuestion.answers[0]} required>
+        <input type="text" placeholder="Answer2..." bind:value={newQuestion.answers[1]} required>
+        <input type="text" placeholder="Answer3..." bind:value={newQuestion.answers[2]} required>
+        <input type="text" placeholder="Answer4... Correct Answer" bind:value={newQuestion.answers[3]} required>
+        <button class="set button add-question-button" type="submit">Add Question</button>
+        <button class="set button discard-button" on:click={() => $questions.state = "creatingNewMap"}>Discard</button>
+    </form>
+</div>
+{/if} 
+
 {#if !!currentQuestion}
 <QuestionModal question={currentQuestion} {handleAnswer}/>
 {/if}
@@ -267,4 +310,56 @@
         transition: all .75s;
         cursor: pointer;
     }
+
+    .modal {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        min-height: 40vh;
+        max-height: 60vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        border-radius: 10px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-content input, button, textarea {
+        padding: 10px;
+        border: none;
+        background-color: #ddd;
+        border-radius: 10px;
+    }
+
+    .modal-content textarea {
+        max-width: 30vw;
+    }
+
+
+    .discard-button {
+        background-color: #8d0707;
+        color: #f0f0f0;
+        cursor: pointer;
+    }
+
+    .add-question-button {
+        background-color: green;
+        color: white;
+        cursor: pointer;
+    }
+
+
 </style>

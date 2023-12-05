@@ -12,81 +12,76 @@
 
     let filter = "";
 
+    let creatingNewSet = false;
+
     function createSet() {
         // Add your logic to create a new set
         // For example, you can push a new set to the 'sets' array
         //sets = [...sets, { title: `New Set ${sets.length + 1}` }];
-        questions.update(prev => ({
+        /* questions.update(prev => ({
             ...prev,
             state: "creatingNewMap"
-        }))
+        })) */
+        $questions.state = "creatingNewMap"
     }
 
-    function chooseSet(index) {
+    function chooseSet(title) {
         // Add your logic to handle choosing a set
+        $questions.countryQuestions = $questions.sets[title];
         showModal=false;
-        console.log(`Chose Set: ${sets[index].title}`);
+
+        $questions.state = "playing"
+        //console.log(`Chose Set: ${sets[index].title}`);
     }
 
-    function deleteSet(index) {
+    function deleteSet(title) {
         // Add your logic to handle deleting a set
-        sets = sets.filter((_, i) => i !== index);
+        delete $questions.sets[title]
+
+        $questions = $questions //to refresh the dom
     }
 
     function handleFileUpload(e) {
-            questions.update(prev => ({
-                ...prev,
-                state: "loading"
-            }))
+            $questions.state = "loading"
 
-            const {files} = e.target;
+            const file = e.target.files[0];
+            const fileName = file.name.replace(".json", "");
+
             const fileReader = new FileReader();
             fileReader.onload = async (e) => {
                 const selected = await JSON.parse(e.target.result);
-                if (Object.keys(selected).length > 1){
-                    questions.set({
-                        countryQuestions: selected, 
-                        state: "playing"
-                    })
-                    showModal = false; //close modal because you have already choose a set
+
+                console.log(e.target)
+
+                if (Object.keys(selected).length > 1){ //if there are questions for more than 1 country
+
+                    //creating unique names
+                    let fileCount = 1; //starts from 1 in the case that there is actually an existing file 
+                    let newFileName = fileName;
+                    while($questions.sets[newFileName]) {
+                        newFileName = `${fileName}(${++fileCount})`
+                    }
+
+                    //upadting sets
+                    $questions.sets = {...$questions.sets, [newFileName]: selected};
+                    $questions.state = "managing"; //we want to go back to managing menu
+
+
+
+//                    showModal = false; //close modal because you have already choose a set
                 } else {
                     alert("You must questions about at least 2 countries!");
                 }
             }
             fileReader.onerror = err => console.log(err);
-            fileReader.readAsText(files[0]); //only read the first file and ignore others
+            fileReader.readAsText(file); //only read the first file and ignore others
     }
 
     $: showModal && questions.update(prev => ({...prev, state: "managing"})) //when we open the modal, we always want to be in the managing window
 
     $: state = $questions.state
-
-
-    //creating new questions
-    let newQuestion = {
-        question: "",
-        answers: [],
-        correctAnswer: 0,
-    }
-
-    function addQuestion() {
-        //add better form checking later
-        //add better for checking messages later
-        if (newQuestion.question === "" || answers.length < 4) {
-            console.log("invalid question");
-            return;
-        }
-
-        const correctAnswer = newQuestion.answers[3];
-        //shufle answers
-        newQuestion.answers.sort(() => Math.random() - 0.5);
-        //set the new index of the correct answer as it's no longer 4th element
-        newQuestion.correctAnswer = newQuestion.answers.indexOf(correctAnswer);
-
-        
-    }
-
 </script>
+
 
 {#if state === "managing"}
 <div class="modal" style:display={showModal ? "flex" : "none"}>
@@ -94,7 +89,7 @@
         <header class="modal-header">
             <input bind:value={filter} placeholder="Filter by header" class="filter-input" />
 
-            <button on:click={createSet} class="header-button">Create Set</button>
+            <button on:click={() => creatingNewSet = true} class="header-button">Create Set</button>
             <button class="header-button">Explore</button>
 <!--             <button class="header-button">From File</button> -->
             <label for="from-file-input" class="header-button from-file-label">
@@ -103,14 +98,20 @@
             <input id="from-file-input" type="file" accept="application/json" on:change={handleFileUpload}>
         </header>
 
-        {#if sets.length > 0}
-            {#each sets as { title }, index (title)}
+        {#if creatingNewSet}
+            <div class="creating-new-container">
+                <input placeholder="Set name..." class="filter-input">
+                <button class="set button choose-button" on:click={createSet}>Create</button>
+            </div>
+        {:else if Object.keys($questions.sets).length > 0}
+            {#each Object.keys($questions.sets) as title (title)}
             {#if !filter || title.includes(filter)}
                 <div class="set">
                     <h3>{title}</h3>
                     <div class="set-buttons">
-                        <button on:click={() => chooseSet(index)} class="set button choose-button">Choose</button>
-                        <button on:click={() => deleteSet(index)} class="set button delete-button">Delete</button>
+                        <button on:click={() => chooseSet(title)} class="set button choose-button">Choose</button>
+                        <button class="set button choose-button">Modify</button>
+                        <button on:click={() => deleteSet(title)} class="set button delete-button">Delete</button>
                     </div>
                 </div>
             {/if}
@@ -124,19 +125,8 @@
 <button class="save-new-set-button" on:click={() => questions.update(prev => ({
     ...prev,
     state: "managing"
-}))}>Save</button> -->
-{:else if state === "creatingNewMenu"}
-<div class="modal" style:display={showModal ? "flex" : "none"}>
-    <div class="modal-content column">
-        <input type="text" placeholder="Question..." bind:value={newQuestion.question} required>
-        <input type="text" placeholder="Answer1..." bind:value={newQuestion.answers[0]} required>
-        <input type="text" placeholder="Answer2..." bind:value={newQuestion.answers[0]} required>
-        <input type="text" placeholder="Answer3..." bind:value={newQuestion.answers[0]} required>
-        <input type="text" placeholder="Answer4... Correct Answer" bind:value={newQuestion.answers[0]} required>
-        <button class="set button add-question-button" on:click={addQuestion}>Add Question</button>
-        <button class="set button discard-button">Discard</button>
-    </div>
-</div>
+}))}>Save</button>  -->
+
 {/if}
   
 <style>
@@ -269,4 +259,17 @@
     .discard-button {
         background-color: #8d0707;
     }
-    </style>
+
+    .creating-new-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .creating-new-container button {
+        margin-bottom: 0;
+        padding: 8px;
+        cursor: pointer;
+        transition: background-color 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+</style>
