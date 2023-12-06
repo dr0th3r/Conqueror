@@ -1,4 +1,5 @@
 <script>
+
     import EuropeMap from "$lib/europe.svelte"
 
     let gameStarted = false;

@@ -28,6 +28,11 @@
         creatingNewSet = false;
     }
 
+    function modifySet(title) {
+        $questions.newSetName = title;
+        $questions.state = "creatingNewMap";
+    }
+
     function chooseSet(title) {
         // Add your logic to handle choosing a set
         $questions.countryQuestions = $questions.sets[title];
@@ -113,7 +118,7 @@
                     <h3>{title}</h3>
                     <div class="set-buttons">
                         <button on:click={() => chooseSet(title)} class="set button choose-button">Choose</button>
-                        <button class="set button choose-button">Modify</button>
+                        <button on:click={() => modifySet(title)} class="set button choose-button">Modify</button>
                         <button on:click={() => deleteSet(title)} class="set button delete-button">Delete</button>
                     </div>
                 </div>

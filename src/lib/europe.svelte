@@ -164,6 +164,7 @@
             ? [countries[Math.floor(Math.random() * countries.length)]] 
             : ["BE"] //fallback value = "Belgium"
 
+
         console.log(conquered);
     }
 
@@ -172,14 +173,9 @@
 
         let countryQuestions = $questions.countryQuestions[countryId];
 
-
-        console.log(countryQuestions.neighbors)
-
-        if (countryQuestions.neighbors) { //for backwards compatibility
+        if (countryOfQuestions && countryQuestions?.neighbors) { //for backwards compatibility
             countryQuestions = countryQuestions.questions
         }
-
-
 
         if (!countryQuestions || countryQuestions.length < 1) {
             alert("Sorry, this country wasn't added yet.");

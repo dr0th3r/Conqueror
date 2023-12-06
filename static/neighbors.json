@@ -13,6 +13,7 @@
     "FR": ["BE", "DE", "LU", "IT", "MC", "ES", "CH"],
     "DE": ["DK", "PL", "CZ", "AT", "CH", "FR", "LU", "NL", "BE"],
     "GR": ["AL", "MK", "BG", "TR"],
+    "TR": ["GR"],
     "HU": ["AT", "SK", "SI", "HR", "RS", "RO", "UA", "SK"],
     "IS": [],
     "IE": ["GB"],
