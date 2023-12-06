@@ -1,57 +1,51 @@
 <script>
-    import QuestionManagementModal from "../lib/question_management_modal.svelte";
+    import gameState from "$lib/stores/state.js"
 
-    let showModal = false;
+    const {state, send} = gameState
 </script>
 
 <header>
-    <h2><a href="/">The Conqueror</a></h2>
-    <button on:click={() => showModal = true}>Manage question sets</button>
+    <h2 on:click={() => send({ type: "goToStartMenu"})}>The Conqueror</h2>
+    <button on:click={() => send({ type: "openSetManagementMenu" })}>Manage Question Sets</button>
 </header>
-{#if showModal}
-    <QuestionManagementModal bind:showModal={showModal}/>
-{/if}
 
-
-
-<slot></slot>
+<slot />
 
 <style>
-/*     header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: #f0f0f0;
-        height: 2rem;
+    :global(*) {
+        padding: 0;
+        margin: 0;
     }
 
-    h2, a {
-        text-decoration: none;
+    :global(body) {
+        height: 100vh;
+        background-color: #111;
         color: #f0f0f0;
-    } */
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
     header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #fff;
-            text-align: center;
-            padding: 10px 20px;
-        }
+        display: flex;
+        justify-content: space-between;
+        padding: .5rem 2rem;
+    }
 
-        h2 a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.7rem;
-        }
+    h2 {
+        user-select: none;
+    }
 
-        button {
-            font-size: 1.25rem;
-            padding: 0.25rem 1rem;
-            background-color: #8d0707;
-            border: 1px solid black;
-            color: #f0f0f0;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+    button {
+        padding: .4rem 1rem;
+        background-color: #333;
+        font-size: .95rem;
+        color: #f0f0f0;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    button:hover {
+        background-color: #444;
+    }
 </style>

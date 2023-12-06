@@ -1,11 +1,12 @@
 <script>
-    import { onMount } from "svelte";
-    import QuestionModal from "$lib/question_modal.svelte"
-    import {questions} from "./stores";
+    export let pathHoverColor = "red";
+    export let pathBaseColor = "#f0f0f0";
+    export let handleClick = (countryId) => {
+        alert(`You clicked on ${countryId}`)
+    }
 
-    //handling data preparation for the map
 
-    const europeMap = `
+    const europeMapSvg = `
     <svg baseprofile="tiny" fill="#ececec" height="684" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1000" xmlns="http://www.w3.org/2000/svg">
         <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
         </path>
@@ -93,8 +94,6 @@
         </path>
         <path d="M521.2 524.1l-0.3 2.3 1 1.7 0.6 6.5-1.8 3.2 0.1 3-1.6 4.3-0.8 1.1-3.8-2-1.2-1.1 1-1.8-2.2-0.9 0.4-1.7-0.2-0.9-1.6-0.5 1-1.3 0-0.8-1.5-1-0.3-0.9 1.3-1.1-0.6-0.9 0.1-1.3 0.9-1.9 1.2-0.9 2.8-0.8 1.2-1.1 1.9 0.6 0.6-1.2-0.2-2.7 0.3-1.1 1.3 0.5 0.4 2.7z m-133.9-47.9l-0.4 1.4-1.9-2.4 1-0.5 1.3 1.5z m84.4-55.6l2.1 1.2 1.4 0 2-0.6 1.3 0.7 1.4 0.1 3.5 4.3 1.8-0.7 1.4 0.4 0.3 0.9 2.1 0.1 3-0.6 2 1.4 4.8 0.8 1.6 0.6 0.1 1.3-3.5 3.8-1.4 5.5-1 1.8-0.3 1.5 0.2 2.4-0.6 2 0 1.5 1.1 1.3-1.5 0.7-0.8 1.4-2.7 0.3-0.8-0.8-1.1 0-1.8 1.4 1.3 1.1-0.6 0.9-3.8 4-2.1 0.9-0.5 2.9-3 2.2-1.1 2.9 0.8 0.7-0.3 1.5-1.5 1 0 1 1.4 0.1 2.3-1.6-0.5-1.3 2.3-1.5 1.9-0.1 2.2 0.3 0.8 2.2-0.5 1.7 2.3 2.3 0.9 1.4-2.6 1.7 0.1 1.6 0.9 0.6 1.7 2.6 1.8 1.6-0.8 2.5-1.2 0.3-1.7 1.3-1.9-0.2-0.8 0.4 1.5 3.1 3.2 1.4 0.5 1.7-0.8 0.7-1.4 2.5 0.7 1.3 0.1 1.4 0.9 0.9 5.1 2.4 3.3-0.6 0.3 2-2.1 2.6 0.2 1.5-0.6 0.3-0.8 0.3-2.4 1.1-3.9 3.4-1.8 1-0.7 1.8-2 1.4-2.4 0.5-2.3 1-1.1-0.4-2.8 0-1.7-1.2-3.4-0.8-1.1-1.8-2.5-0.1-0.8-1.5-1.9 0.3-1.5 0.7-2-0.1-5.9-1.8-1.4-1.4-1.7 0.5-1.6 1.6-6.5 4.1-2.6 4.3-0.1 1.2 0.7 3.9 1.6 2.5-3.1-0.6-3.8 1.1-1.2 0.8-4.7-1.2-2.1 1.1-1.3-1.2-2.8-1.2 0-1.5-2.6-0.6-0.9 0.7-1.1-1.5-1.7-0.3-2.5-1-4-1.1-0.8 2.4-4.7 0-0.7-0.4-3.1 0.4-3.2-2.1-3.6 0.4-2.2-2.1-2.2-0.2-4.4-1.7-1.8 0.4 0.3-3.2-4.3-1.3-0.5-1.3 2-0.5 1.9-1.9 1.7-7.1 1.3-8.3 1-1.6 1.2-0.4-1-1.2-1.1 1.5 0.7-7.6 0.5-2.8 0.9-3 3.1 2.4 0.8 1 0.9 3.4 0.6 0.1-1.1-4.6-1.8-2.3-3.6-2.3-0.5-1.3 1.8-0.6-0.5-1.8-0.5-5.9-3-0.6-4.8-2.6-1.7-2.6-1.6-1.9-0.4-1.7 0.9-1.8-0.8-1.1-1.4-0.8 1.1-1.6-3-0.2-1.8-0.5-0.3-1.1 1.3-1.4-1.6-0.8-2.6 0.2-0.2-1.7-2.2 0.3-1.2-0.3-1.1-1.1-1.3 0.2-2.2-0.4-0.8-0.7-4.8-1.3-2-0.1-1.9 0.6-1.1-0.3-1.3-2.2-3.1-1.1 0.6-0.7 3.1-0.6 0.6-0.7-2.2-0.9-0.2-1.2 1.6 0.3 0.1-1.2-4 0.1-0.4-1.3 0.5-1.4 2.3-1.2 5.8-1.4 2.5 0.2 1.7-0.2 3-1.6 2.9-0.4 2.7 0.8 2.5 2.8 1.2 1 3.1-1.7 4.4 0.1 0.9 0.9 1.2-1.7 1 1 4.7-0.2-1.5-2.5-0.2-6-1.3-1.7-2.1-4.3 0.2-1.4 3.2 0.3 2.7-0.6 1.3 0.4 0.3 2.8 1.1 1.6 2.2 0 2.3 0.5 3 0.1 4.3 0.8 1.8-0.5 3.5-2-1.8-0.7-0.2-0.7 0.9-2.2 5.2-2.5 3.7-0.7 3.8-1.3 2-1.4 1.2-1.8 0.5-1.3 0.3-6.8 1-2.2 2.9-1.6 6.4-1.1 0.9-0.5 0.9 2.2 0 1.2 2.9 2.4 3.2-1 1.6 1.8 0.5 2 4.2 1.1 0.6 2 0.9-0.3 3.6 0.4 1.6 1.1-0.4 1.6 0.7 0.7-0.7 1.4 0.5 0.6 2.3 0.3 2.2-0.3 1.3-0.6 0.5-1.4 1.9-0.6-0.8 2.7 0.6 0.6 0.4 2 1.7 0.1 3.3 1.5 2.8 2.6 3.4-0.4z" id="FR" name="France">
         </path>
-        <path d="M306 611.9l-1.2 0.2-4.5 2.5-1.3 0-2.5-1.1-4.5-0.4-1.5-0.3-1.8 0.7-1.5 0-1.1 1-0.8-0.3 1-2.1 1.6-4.1 0-2.6 0.4-2.2-0.3-2.1-0.7-1.4 1.1-3.5 0-1.8-0.9-2.3 2.8 0.3-1.7-1.4-1.5 0-2.3 0.9-1.5 0.1 0.1-1.4-0.5-1.8 2-0.6 1.6-1.7-0.3-1.6-1.2 1.1-0.6 1.4-2.8 0.7-1.5-0.5 0-1.9 0.6-1.7 0.4-2.3 0.8-2.2-0.2-1.4 1.6-1.3 1.4-1.9 4.3-8.9-0.6-1 1.7-6.6 1.2-2.3 0.6-4.3-0.2-2-0.7-2-0.7-4.3 0-1.4-0.9-1.8 0.1-1 1.4-1.7 1.2-1.1 1.9-0.9 4.1-1 1 1.8-1.3 1.9 0.9 1.3 3-1.1 2.9-0.1 2.2 0.8 1.4 0 2.5-0.9 0.8-1.4 1.5 0.5 5.2 0.1 0.7 1.1 0.1 3.1 1.9 0.2 1.9 0.9 0.3 1.1-2.5 2.5-2.1 1.1-1.6 1.4-1.1 1.6-2 1.6 0.8 2 0.4 3.5-0.4 3.8 0.4 1.1-2.7 2.1-0.2 1 1.4 1.3 0 1.9-1.7 3.5-1 0.5-4.3 0-1.1 0.3 1.1 1.9 1.4 1.2 0.3 1.9 1.6 3.2 1.7 0.4 0.5 0.8-0.6 2.4-3.2 3-0.9 4 3 4.3 1.7-0.2-0.7 2.4-2.1 0.6-3.5 4.3-0.8 2.2 1.1 6.4z" id="PT" name="Portugal">
-        </path>
         <path d="M843.2 646.3l-0.1 0-0.1 0 0.1-0.1 0.1 0.1z m0 0l0.1 0 0.1 0 0.1 0.1-0.1 0-0.1 0-0.1 0 0-0.1z m-0.4-0.3l-0.1 0 0-0.1 0.1 0 0-0.1 0.1 0.1 0 0.1-0.1 0z m3.5-0.8l0.2 0.1 0.3 0.3 0.2 0.4 0.1 0.3 0.2 0.2 0.2 0.1-0.2 0-0.3 0-0.3-0.1-0.2-0.2-0.2 0-0.7 0.1-0.6 0.1-0.1 0.1-0.1 0.1-0.3 0-0.3 0-0.1-0.1 0.2-0.1 0.1 0-0.1-0.3-0.2 0-0.2-0.1 0-0.4-0.1-0.1-0.3-0.1 0-0.2 0.1-0.1 0.2-0.1 0.1 0.1 0.1 0.1 0.2-0.1 0.1-0.1 0.1-0.1 0.1-0.1 0.2 0.2 0.2 0.1 0.1 0 0.2 0.1 0.1 0 0.3-0.1 0.2 0 0.1 0.1 0.2 0 0.1 0 0.1 0 0-0.1z m-4 1.1l0 0.2-0.3 0.1-0.3 0.3 0 0.2-0.1 0.3 0 0.3 0 0.3 0 0.3 0 0.1-0.1 0-0.1 0.1 0 0.3-0.1 0.1-0.2 0-0.4 0-0.2 0.1-0.1 0.1-0.1 0.2-0.1 0.1-0.2 0.1-0.4 0.1-0.4 0.2-0.3 0.1-0.2-0.3 0.1 0.5-0.4 0.2-0.9 0.2-0.2 0.1-0.1 0.1-0.2 0.1-0.2 0-0.9-0.1-1 0.1-0.1 0.1-0.2 0.1-0.6 0.5-0.1 0.3-0.3 0-0.3 0.1 0 0.1-0.1-0.1-0.1-0.2 0.1-0.2 0.1 0.1 0.3 0-0.1-0.4-0.4-0.1-0.2 0.2-0.1 0.1-0.2-0.1 0 0.1-0.4-0.1-0.3-0.2-0.1-0.1 0-0.2-0.1 0-0.1 0-0.1 0-0.1 0-0.1 0.1 0 0.1-0.2 0-0.1 0.2-0.2 0-0.2 0-0.1 0.1 0.1 0.2-0.2 0.1-0.5 0-0.6-0.1-0.5-0.2-0.7-0.4-0.3-0.1-0.3-0.1-0.5 0-0.3-0.1-0.2-0.2-0.6-0.4-0.1-0.1-0.1-0.4 0-0.1-0.1-0.1-0.4-0.9-0.1-0.1-0.3-0.2-0.2-0.1-0.1-0.1-0.1-0.2 0-0.2 0.1-0.2-0.3-0.4-0.1-0.2 0-0.4-0.1-0.2-0.3-0.5-0.2-0.3-0.1-0.4 0.1-0.3 0.1 0 0.3 0.1 0.4 0.5 0.3 0.1 0.2 0.1 0.6 0 0.4-0.2 0.3-0.4 0.3-0.4 0.1-0.5 0.1-0.3 0.2-0.1 0.1-0.1 0-0.1 0.1 0 0.1 0.1 0.1 0 0.2 0 0.1 0.1 0.2 0.2 0.2 0 0.1 0 0.2-0.2 0.1-0.2 0-0.2 0.4 0.1 0.2 0.4 0.1 0.2 0.1 0.2 0.2 0.1 0.4 0.1 0.3 0.1 0.2 0.2 0.2 0.1 0.1 0.2 0 0.2 0.1 0.1 0.1 0.1 0.1 0 0.4-0.1 0.1-0.2 0.1-0.2 0.1-0.1 0.1 0.1 0.1 0.1 0.2 0.1 0.2 0 0.2-0.1 0.2-0.2 0.2-0.2 0.2-0.1 0.3-0.2 0.1-0.2 0.2 0 0.3 0.1 0.3 0 0.4 0 0.1-0.1 0.1 0 0.1-0.2 0.3-0.2 0.2 0 0.2 0.1 0.1 0.1 0.2 0 0.1 0 0.2 0.2 0.2 0.2 0.2 0.1 0.3 0.1 0.1 0 0.1-0.1 0-0.1 0.1-0.2 0.3-0.3 0.1 0 0.2 0 0.3 0 0.2 0 0.1 0 0 0.2 0.1 0.2 0.1 0.1 0.2 0.2 0.2 0.2 0 0.1 0.1 0.3 0 0.2 0 0.3 0 0.4-0.1 0.3 0.1 0.2 0.1 0.1 0.2 0 0.2 0 0-0.3 0-0.4 0.1-0.1 0.1-0.1 0.1-0.1 0.1 0.1 0.1 0.4 0.1 0.2 0.1 0.1 0.3-0.1 0-0.2 0.1-0.1 0.2 0 0.1 0.1 0.2 0 0.1-0.1 0.1 0.1 0.1 0 0.3 0.2 0.2 0 0.1 0 0.3 0.2z" id="CY" name="Cyprus">
         </path>
         <circle cx="399.9" cy="390.8" id="0">
@@ -106,311 +105,50 @@
     </svg>
     `
 
-    let neighborCountries = {}
-    
-    const includesD = /\sd=".+?"/
-    const includesId = /id=".+?"/
-    const includesName = /name=".+?"/
+    let paths = getPaths(europeMapSvg);
 
-    let paths = europeMap.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
-        return {
-            id: line.match(includesId)[0].trim().slice(4, -1),
-            d: line.match(includesD)[0].trim().slice(3, -1),
-            name: line.match(includesName)[0].trim().slice(6, -1),
-            color: "#fff"
-        }
-    })
+    function getPaths(map) { //maybe place later in some utility file
+        const includesD = /\sd=".+?"/
+        const includesId = /id=".+?"/
+        const includesName = /name=".+?"/
 
-    let currentQuestion = null;
-
-    onMount(async () => {
-        if (Object.keys($questions.countryQuestions).length < 2) { //fetch fallback/default questions
-            questions.update(prev => ({
-                ...prev, 
-                state: "loading"
-            }))
-
-            const jsonData = await fetch("./questions.json"); 
-            const data = await jsonData.json();
-            questions.set({
-                countryQuestions: data,
-                state: "playing",
-                sets: {
-                    "Default": data
-                }
-            });
-        }
-
-        if (Object.keys(neighborCountries).length < 1) {
-            const jsonData = await fetch("./neighbors.json");
-            const data = await jsonData.json();
-
-            neighborCountries = data;
-        }
-    })
-
-    let conquered = ["BE"]; //fallback value
-    let inviding= null;
-
-    function startGame() {
-        console.log($questions);
-
-        const countries = Object.keys($questions.countryQuestions);
-
-        conquered = countries.length > 0 
-            ? [countries[Math.floor(Math.random() * countries.length)]] 
-            : ["BE"] //fallback value = "Belgium"
-
-
-        console.log(conquered);
+        return map.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
+            return {
+                id: line.match(includesId)[0].trim().slice(4, -1),
+                d: line.match(includesD)[0].trim().slice(3, -1),
+                name: line.match(includesName)[0].trim().slice(6, -1),
+                color: pathBaseColor
+            }
+        })
     }
-
-    function showQuestion(countryId) {
-        countryId = countryId.toUpperCase();
-
-        let countryQuestions = $questions.countryQuestions[countryId];
-
-        console.log(countryQuestions);
-
-        if (countryQuestions && countryQuestions?.neighbors) { //for backwards compatibility
-            countryQuestions = countryQuestions.questions
-        }
-
-        if (!countryQuestions || countryQuestions.length < 1) {
-            alert("Sorry, this country wasn't added yet.");
-            return;
-        } 
-
-        inviding = neighborCountries[countryId].find(neighbor => conquered.includes(neighbor));
-
-        if (!inviding) {
-            alert("You must only invide countries that are neighbors of the countries you already conquered!");
-            return;
-        }
-
-        if (!questions || $questions.state === "loading" || Object.keys($questions.countryQuestions).length < 1) {
-            console.log("Questions failed to load");
-            return;
-        }
-
-        if (countryQuestions.length < 1) {
-            console.log("No country questions availiable.")
-            return;
-        }
-
-        currentQuestion = {...countryQuestions[Math.floor(Math.random() * countryQuestions.length)], countryId: countryId};
-    
-        console.log($questions.countryQuestions[countryId]);
-    }
-
-    function handleAnswer(correctAnswer) {
-        if (correctAnswer) {
-            conquered = [...conquered, currentQuestion.countryId];
-
-            console.log(conquered);
-        } else if (!inviding) {
-            throw new Error("No country is inviding");
-        } else {
-            conquered = conquered.filter(country => country !== inviding);
-        }
-
-        currentQuestion = null;
-    }
-
-
-    $: if ($questions.state === "playing" && Object.keys($questions?.countryQuestions).length > 1) startGame();
-
-    $: if (conquered?.length <= 0) {
-        setTimeout(() => alert("You lost!"), 0); //to first clean the dom and only then show alert
-        startGame();
-    }
-
-    $: if ($questions.state === "playing" && conquered.length >= Object.keys($questions.countryQuestions).length) {
-        setTimeout(() => alert("You won!"), 0); //to first clean the dom and only then show alert
-        startGame();
-    }
-
-    //creating new questions
-
-    let countryOfQuestions = ""
-
-    let newQuestion = {
-        question: "What is the longest river in ...?",
-        answers: ["", "", "", ""],
-        correctAnswer: 3,
-        neighbors: []
-    };
-
-
-    function addQuestion() {
-        //shuffle answers
-        const correctAnswer = newQuestion.answers[3]; //saved so that we can find the correct answer in the shuffled array
-        newQuestion.answers = newQuestion.answers.sort(() => Math.random() - 0.5);
-        newQuestion.correctAnswer = newQuestion.answers.indexOf(correctAnswer);
-
-
-        if ($questions.newSetName === "") {
-            throw new Error("Not creating any new set")
-        }
-
-        const newSetName = $questions.newSetName
-
-        if (!$questions.sets[newSetName]) {
-            $questions.sets[newSetName] = {};
-        }
-
-        if ($questions.sets[newSetName][countryOfQuestions]) {
-            $questions.sets[newSetName][countryOfQuestions] = [
-                ...$questions.sets[newSetName][countryOfQuestions],
-                {
-                    question: newQuestion.question,
-                    answers: structuredClone(newQuestion.answers), //we need deep copy
-                    correctAnswer: newQuestion.correctAnswer
-                }
-            ]
-        } else {
-            $questions.sets[newSetName][countryOfQuestions] = [
-                {
-                    question: newQuestion.question,
-                    answers: structuredClone(newQuestion.answers), //we need deep copy
-                    correctAnswer: newQuestion.correctAnswer
-                }
-            ]
-        }
-
-
-        newQuestion = {
-            question: "What is the longest river in ...?",
-            answers: ["", "", "", ""],
-            correctAnswer: 3
-        };
-
-        $questions.state = "creatingNewMap"
-    }
-
-    function backToMenu() {
-        $questions.state = "managing"
-        $questions.newSetName = "";
-    }
-
 </script>
 
-{#if $questions.state.includes("creatingNew")}
-    <button class="save-new-set-button" on:click={backToMenu}>Back To Menu</button>
-{/if}
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
-    {#each paths as path, id (id)}
-        {@const isConquered = conquered.includes(path.id)}
-        {@const fillColor = $questions.state !== "playing" ? path.color
-            : isConquered ? "green" : path.color
-        }
+    {#each paths as path (path.id)}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <path 
-            d={path.d} 
-            id={path.id} 
-            name={path.name} 
-            fill={fillColor} 
-        on:mouseenter={() => {
-            path.color = ($questions.state !== "playing" && $questions.state !== "loading") ? "blue" : "red";
-            path = path; //for svelte to react
-        }}
-        on:mouseleave={() => {
-            path.color = "fff";
-            path = path;
-        }}
-        on:click={() => {
-            if ($questions.state === "creatingNewMap") {
-                $questions.state = "creatingNewMenu"
-                countryOfQuestions = path.id
-            } else {                
-                isConquered && console.log("Already conquered");
-    
-                !isConquered && showQuestion(path.id);
-            }
-        }}
+        <path
+            d={path.d}
+            id={path.id}
+            name={path.name}
+            fill={path.color}
+
+            on:mouseenter={() => {
+                path.color = pathHoverColor;
+            }}
+
+            on:mouseleave={() => {
+                path.color = pathBaseColor;
+            }}
+
+            on:click={() => handleClick(path.id)}
         ></path>
     {/each}
-    <circle cx="399.9" cy="390.8" id="0">
-    </circle>
-    <circle cx="575.4" cy="412" id="1">
-    </circle>
-    <circle cx="521" cy="266.6" id="2">
-    </circle>
 </svg>
-{#if $questions.state === "creatingNewMenu"}
-<div class="modal">
-    <form class="modal-content column" on:submit|preventDefault={addQuestion}>
-        <textarea type="text" bind:value={newQuestion.question} required></textarea>
-        <input type="text" placeholder="Answer1..." bind:value={newQuestion.answers[0]} required>
-        <input type="text" placeholder="Answer2..." bind:value={newQuestion.answers[1]} required>
-        <input type="text" placeholder="Answer3..." bind:value={newQuestion.answers[2]} required>
-        <input type="text" placeholder="Answer4... Correct Answer" bind:value={newQuestion.answers[3]} required>
-        <button class="set button add-question-button" type="submit">Add Question</button>
-        <button class="set button discard-button" on:click={() => $questions.state = "creatingNewMap"}>Discard</button>
-    </form>
-</div>
-{/if} 
-
-{#if !!currentQuestion}
-<QuestionModal question={currentQuestion} {handleAnswer}/>
-{/if}
 
 <style>
     path {
-        transition: all .75s;
+        transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
         cursor: pointer;
     }
-
-    .modal {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .modal-content {
-        background-color: #fff;
-        padding: 20px;
-        min-height: 40vh;
-        max-height: 60vh;
-        overflow-y: auto;
-        scroll-behavior: smooth;
-        border-radius: 10px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .modal-content input, button, textarea {
-        padding: 10px;
-        border: none;
-        background-color: #ddd;
-        border-radius: 10px;
-    }
-
-    .modal-content textarea {
-        max-width: 30vw;
-    }
-
-
-    .discard-button {
-        background-color: #8d0707;
-        color: #f0f0f0;
-        cursor: pointer;
-    }
-
-    .add-question-button {
-        background-color: green;
-        color: white;
-        cursor: pointer;
-    }
-
-
 </style>
