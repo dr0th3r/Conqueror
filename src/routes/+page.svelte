@@ -1,16 +1,43 @@
 <script>
+    import {onMount} from "svelte"
+    import { questions } from "$lib/stores";
 
     import EuropeMap from "$lib/europe.svelte"
 
-    let gameStarted = false;
+    onMount(async () => {
+        if (Object.keys($questions.countryQuestions).length < 2) { //fetch fallback/default questions
+            questions.update(prev => ({
+                ...prev, 
+                state: "loading"
+            }))
+
+            const jsonData = await fetch("./questions.json"); 
+            const data = await jsonData.json();
+            questions.set({
+                countryQuestions: data,
+                state: "startMenu",
+                sets: {
+                    "Default": data
+                }
+            });
+        }
+    })
+
 </script>
 
 <main>
-    {#if gameStarted}
+    {#if $questions.state !== "loading" && $questions.state !== "startMenu"}
         <EuropeMap />
     {:else}    
         <h1>Conqueror</h1>
-        <button on:click={() => gameStarted = true}>Start Game</button>
+        <button on:click={() => {
+            if ($questions.state === "loading") {
+                alert("Wait please, the questions are still loading...");
+                return;
+            }
+
+            $questions.state = "playing";
+        }}>Start Game</button>
     {/if}
 </main>
 

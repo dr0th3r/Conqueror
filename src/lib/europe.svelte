@@ -146,10 +146,7 @@
             const data = await jsonData.json();
 
             neighborCountries = data;
-
-            console.log(neighborCountries);
         }
-        //questions = data;
     })
 
     let conquered = ["BE"]; //fallback value
@@ -173,7 +170,9 @@
 
         let countryQuestions = $questions.countryQuestions[countryId];
 
-        if (countryOfQuestions && countryQuestions?.neighbors) { //for backwards compatibility
+        console.log(countryQuestions);
+
+        if (countryQuestions && countryQuestions?.neighbors) { //for backwards compatibility
             countryQuestions = countryQuestions.questions
         }
 
