@@ -32,6 +32,7 @@
 
     h2 {
         user-select: none;
+        cursor: pointer;
     }
 
     button {

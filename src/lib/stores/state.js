@@ -30,6 +30,8 @@ export function gameMachine(state, event) { //machine for managing gameState, co
         case "setManagementMenu": 
             if (event.type === "goToStartMenu") {
                 return "startMenu"
+            } else if (event.type === "startGame") {
+                return "playing"
             }
 
         default: 

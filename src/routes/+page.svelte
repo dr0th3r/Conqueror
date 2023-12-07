@@ -4,54 +4,68 @@
     import EuropeMap from "$lib/maps/Europe.svelte"
     import Modal from "$lib/Modal.svelte";
 
+    export let data; //fetched default sets
+    
     const {state, send} = gameState
 
-    const sets = { //mock variable
-        "Default": [
-            
-        ],
-        "Europe 2": []
-    }
+    const sets = data;
+
+    let currentSet = sets[Object.keys(sets)[0]] || null;
 
     let setFilter = "";
 
-    console.log($state) 
+    function startGame() {
+        send({ type: "startGame" })
+    }
 </script>
 
 <main>
     {#if $state === "startMenu"}
-        <button on:click={() => send({ type: "startGame" })}>Start</button>
-    {:else if $state === "playing"}
+        <button on:click={startGame}>Start</button>
+    {:else if $state === "playing" && !!currentSet} 
         <EuropeMap 
             handleClick = {(countryId) => {
-
+                send({ type: "openQuestionModal" })
             }}
         />
-    {:else if $state === "setManagementMenu"}
-        <h1>MY AWSOME MENU</h1>
     {/if}
 </main>
 
-<Modal>
-    <header>
-        <input placeholder="Filter..." bind:value={setFilter}/>
-        <button>Create Set</button>
-        <button>Import From File</button>
-    </header>
+{#if $state === "setManagementMenu"}
+    <Modal> <!-- menu modal -->
+        <header>
+            <input placeholder="Filter..." bind:value={setFilter}/>
+            <button>Create Set</button>
+            <button>Import From File</button>
+        </header>
 
-    {@const filteredSets = setFilter !== "" 
-                            ? Object.keys(sets).filter(set => set.toLowerCase().includes(setFilter.toLowerCase()))
-                            : Object.keys(sets)
-    }
-    {#each filteredSets as set, id (id)}
-        <div class="set">
-            <h3>{set}</h3>
-            <button>Choose</button>
-            <button>Modify</button>
-            <button>Delete</button>
-        </div>
-    {/each}
-</Modal>
+        {@const filteredSets = setFilter === "" 
+            ? Object.keys(sets)
+            : Object.keys(sets).filter(set => set.toLocaleLowerCase().includes(setFilter.toLocaleLowerCase()))
+        }
+        {#if filteredSets.length > 0}
+            {#each filteredSets as set, id (id)}
+                <div class="set">
+                    <h3>{set}</h3>
+                    <button on:click={() => {
+                        currentSet = sets[set];
+                        startGame();
+                    }}>Choose</button>
+                    <button>Modify</button>
+                    <button>Delete</button>
+                </div>
+            {/each}
+        {:else}
+            <p>No matches found</p>
+        {/if}
+    </Modal>
+{/if}
+
+{#if $state === "questionModal"}
+    <Modal > <!-- question modal -->
+        
+    </Modal>
+{/if}
 
 <style>
     main {
