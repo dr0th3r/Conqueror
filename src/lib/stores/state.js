@@ -25,12 +25,19 @@ export function gameMachine(state, event) { //machine for managing gameState, co
                 return "setManagementMenu"
             } else if (event.type === "goToStartMenu") {
                 return "startMenu"
+            } else if (event.type === "openQuestionModal") {
+                return "questionModal"
             }
             
         case "setManagementMenu": 
             if (event.type === "goToStartMenu") {
                 return "startMenu"
             } else if (event.type === "startGame") {
+                return "playing"
+            }
+        
+        case "questionModal":
+            if (event.type === "continuePlaying") {
                 return "playing"
             }
 

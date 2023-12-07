@@ -1,6 +1,10 @@
 <script>
     export let pathHoverColor = "red";
     export let pathBaseColor = "#f0f0f0";
+    export let pathConqueredColor = "green";
+
+    export let conquered = [];
+
     export let handleClick = (countryId) => {
         alert(`You clicked on ${countryId}`)
     }
@@ -112,36 +116,63 @@
         const includesId = /id=".+?"/
         const includesName = /name=".+?"/
 
-        return map.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
+        return map.split("\n")
+            .filter(line => line.includes("path") && line.includes("d="))
+            .reduce((acc, cur) => {
+                const id = cur.match(includesId)[0].trim().slice(4, -1);
+                const d = cur.match(includesD)[0].trim().slice(3, -1);
+                const name = cur.match(includesName)[0].trim().slice(6, -1)
+
+                acc[id] = {
+                    d: d,
+                    name: name,
+                    color: pathBaseColor
+                }
+
+                return acc;
+            }, {})
+
+/*         return map.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
             return {
                 id: line.match(includesId)[0].trim().slice(4, -1),
                 d: line.match(includesD)[0].trim().slice(3, -1),
                 name: line.match(includesName)[0].trim().slice(6, -1),
                 color: pathBaseColor
             }
-        })
+        }) */
+    }
+
+
+    $: if (conquered && conquered.length > 0) {
+        console.log(conquered[conquered.length - 1]);
+
+        //console.log(paths);
+
+
+        paths[conquered[conquered.length - 1]].color = pathConqueredColor;
     }
 </script>
 
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
-    {#each paths as path (path.id)}
+    {#each Object.entries(paths) as [pathid, path] (pathid)}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
+        {@const isConquered = conquered.includes(pathid)}
         <path
             d={path.d}
-            id={path.id}
+            id={pathid}
             name={path.name}
             fill={path.color}
 
             on:mouseenter={() => {
-                path.color = pathHoverColor;
+                !isConquered && (path.color = pathHoverColor);
             }}
 
             on:mouseleave={() => {
-                path.color = pathBaseColor;
+                path.color = isConquered ? pathConqueredColor : pathBaseColor;
             }}
 
-            on:click={() => handleClick(path.id)}
+            on:click={() => !isConquered && handleClick(pathid)}
         ></path>
     {/each}
 </svg>

@@ -14,6 +14,36 @@
 
     let setFilter = "";
 
+    let currentCountry = null;
+
+    let conquered = [];
+
+    function getRandomQuestion(set, countryId) {
+
+        if (!!countryId && !!set) {
+            const countryQuestions = set[countryId];
+            if (!countryQuestions) {
+                alert("No questions for country");
+                return;
+            }
+            
+            return countryQuestions[Math.floor(Math.random() * countryQuestions.length)];
+        } else {
+            alert("No questions for country");
+            return;
+        }
+    }
+
+    function handleAnswer(isCorrect) {
+        if (isCorrect) {
+            conquered = [...conquered, currentCountry];
+        } else {
+            alert("Incorrect!");
+        }
+
+        send({ type: "continuePlaying" })
+    }
+
     function startGame() {
         send({ type: "startGame" })
     }
@@ -22,9 +52,11 @@
 <main>
     {#if $state === "startMenu"}
         <button on:click={startGame}>Start</button>
-    {:else if $state === "playing" && !!currentSet} 
+    {:else if $state === "playing" || $state === "questionModal" && !!currentSet} 
         <EuropeMap 
+            {conquered}
             handleClick = {(countryId) => {
+                currentCountry = countryId;
                 send({ type: "openQuestionModal" })
             }}
         />
@@ -61,10 +93,17 @@
     </Modal>
 {/if}
 
+
 {#if $state === "questionModal"}
-    <Modal > <!-- question modal -->
-        
-    </Modal>
+    {@const questionData = getRandomQuestion(currentSet, currentCountry)}
+    {#if questionData}
+        <Modal > <!-- question modal -->
+            <h3 class="question">{questionData?.question}</h3>
+            {#each questionData?.answers as answer, id (id)}
+                <button on:click={() => handleAnswer(questionData.correctAnswer === id)}>{answer}</button>
+            {/each}
+        </Modal>
+    {/if}
 {/if}
 
 <style>
@@ -111,5 +150,9 @@
 
     .set button {
         font-size: .9rem;
+    }
+
+    .question {
+        text-align: center;
     }
 </style>
