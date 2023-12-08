@@ -8,7 +8,8 @@
     
     const {state, send} = gameState
 
-    const sets = data;
+    const sets = data.questionSets;
+    const neighbors = data.neighbors;
 
     let currentSet = sets[Object.keys(sets)[0]] || null;
 
@@ -45,6 +46,10 @@
     }
 
     function startGame() {
+        if (!currentSet) return
+
+        conquered = [Object.keys(currentSet)[Math.floor(Math.random() * Object.keys(currentSet).length)]] || ["CZ"]
+
         send({ type: "startGame" })
     }
 </script>
@@ -56,6 +61,12 @@
         <EuropeMap 
             {conquered}
             handleClick = {(countryId) => {
+                //if invaded country isn't neighbor of any of the conquered countries
+                if (!conquered.some((country) => neighbors[country].includes(countryId))) {
+                    alert("You must only invide neighbor countries!");
+                    return;
+                } 
+
                 currentCountry = countryId;
                 send({ type: "openQuestionModal" })
             }}

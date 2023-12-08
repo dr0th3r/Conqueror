@@ -131,25 +131,12 @@
 
                 return acc;
             }, {})
-
-/*         return map.split("\n").filter(line => line.includes("path") && line.includes("d=")).map(line => {
-            return {
-                id: line.match(includesId)[0].trim().slice(4, -1),
-                d: line.match(includesD)[0].trim().slice(3, -1),
-                name: line.match(includesName)[0].trim().slice(6, -1),
-                color: pathBaseColor
-            }
-        }) */
     }
 
 
     $: if (conquered && conquered.length > 0) {
-        console.log(conquered[conquered.length - 1]);
-
-        //console.log(paths);
-
-
-        paths[conquered[conquered.length - 1]].color = pathConqueredColor;
+        console.log(conquered);
+        paths[conquered[conquered.length - 1]].color = pathConqueredColor; //last from conquered because all other changes should already be applied
     }
 </script>
 
@@ -163,6 +150,7 @@
             id={pathid}
             name={path.name}
             fill={path.color}
+            style:cursor={isConquered ? "initial" : "pointer"}
 
             on:mouseenter={() => {
                 !isConquered && (path.color = pathHoverColor);
@@ -180,6 +168,5 @@
 <style>
     path {
         transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
-        cursor: pointer;
     }
 </style>

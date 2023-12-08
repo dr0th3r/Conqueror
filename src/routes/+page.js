@@ -1,8 +1,12 @@
 //load default question set
 import questionsJSON from "$lib/question_sets/questions.json"
+import neighbors from "$lib/question_sets/neighbors.json"
 
 export async function load({ params }) {
-    return {Default: processQuestions(questionsJSON)};
+    return {
+        questionSets: {Default: processQuestions(questionsJSON)},  
+        neighbors: neighbors
+    };
 }
 
 function processQuestions(questions) {
