@@ -4,6 +4,7 @@
     import EuropeMap from "$lib/maps/Europe.svelte"
     import Modal from "$lib/Modal.svelte";
     import { parse } from "svelte/compiler";
+    import { hasContext } from "svelte";
 
     export let data; //fetched default sets
     
@@ -21,6 +22,8 @@
     let selectedCountry = null;
 
     let conquered = [];
+
+    let creatingSet = false;
 
     function getRandomQuestion(set, countryId) {
 
@@ -140,6 +143,14 @@
         send({type: "closeModal"})
     }
 
+    function createSet(e) {
+        const setName = new FormData(e.target).get("setName");
+        
+        sets[setName] = {}
+
+        creatingSet = false;
+    }
+
     $: console.log($state)
 
     $: if ($state === "modifyingSet") {
@@ -179,10 +190,11 @@
 {#if $state === "setManagementMenu"}
     <Modal> <!-- menu modal -->
         <header>
-            <input placeholder="Filter..." bind:value={setFilter}/>
-            <button>Create Set</button>
+            <input disabled={creatingSet} placeholder="Filter..." bind:value={setFilter}/>
+            <button disabled={creatingSet} on:click={() => creatingSet = true}>Create Set</button>
             <label for="sets-from-file-input" id="sets-from-file-label">Import From File</label>
             <input 
+                disabled={creatingSet}
                 id="sets-from-file-input"
                 type="file" 
                 accept="application/json" 
@@ -195,20 +207,36 @@
             : Object.keys(sets)
                 .filter(set => set.toLocaleLowerCase().includes(setFilter.toLocaleLowerCase()))
         }
-        {#if filteredSets.length > 0}
+        {#if creatingSet}
+            <form on:submit={createSet}>
+                <label for="set-name">Set Name: </label>
+                <input type="text" name="setName" id="set-name">
+                <div class="btn-group">
+                    <button type="submit">Create</button>
+                    <button type="button" on:click={() => creatingSet = false}>Discard</button>
+                </div>
+            </form>
+        {:else if filteredSets.length > 0}
             {#each filteredSets as set, id (id)}
+                <!-- truly hasQuestions just checks if there are any countries, but this shouldn't 
+                     have any impact on truthiness of the statement
+                -->
+                {@const hasQuestions = Object.keys(sets[set]).length > 0} 
                 <div class="set">
                     <h3>{set}</h3>
-                    <button on:click={() => {
-                        currentSet = sets[set];
-                        countries = Object.keys(currentSet);
-                        startGame();
-                    }}>Choose</button>
+                    {#if hasQuestions}
+                        <button on:click={() => {
+                            currentSet = sets[set];
+                            countries = Object.keys(currentSet);
+                            startGame();
+                        }}>Choose</button>
+                    {/if}
                     <button
                         on:click={() => {
+                            currentSet = sets[set];
                             send({ type: "modfiySet" })
                         }}
-                    >Modify</button>
+                    >{hasQuestions ? "Modify Set" : "Add Questions"}</button>
                     <button on:click={() => {
                         delete sets[set];
                         sets = sets; //for reactive refresh
