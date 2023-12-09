@@ -3,17 +3,18 @@
 
     import EuropeMap from "$lib/maps/Europe.svelte"
     import Modal from "$lib/Modal.svelte";
+    import { parse } from "svelte/compiler";
 
     export let data; //fetched default sets
     
     const {state, send} = gameState
 
-    const sets = data.questionSets;
+    let sets = data.questionSets;
     const neighbors = data.neighbors;
 
     let currentSet = sets[Object.keys(sets)[0]] || null;
 
-    $: countries = Object.keys(currentSet);
+    let countries = Object.keys(currentSet); //not a reactive declaration because of a way in which they update
 
     let setFilter = "";
 
@@ -23,16 +24,24 @@
 
     function getRandomQuestion(set, countryId) {
 
+        console.log("test");
+
         if (!!countryId && !!set) {
             const countryQuestions = set[countryId];
             if (!countryQuestions) {
                 alert("No questions for country");
+                
+                send({ type: "continuePlaying" })
+
                 return;
             }
             
             return countryQuestions[Math.floor(Math.random() * countryQuestions.length)];
         } else {
             alert("No questions for country");
+
+            send({ type: "continuePlaying" })
+
             return;
         }
     }
@@ -75,6 +84,41 @@
 
         send({ type: "startGame" })
     }
+
+    //handling set importing
+
+    function handleSetImport(e) {
+        const importedFile = e.target.files[0];
+
+        if (!importedFile) {
+            console.log("No file provided");
+            return;
+        }
+
+        let fileName = importedFile.name.replace(".json", "");
+
+        //handle file naming collisions
+        let sameNameCount = 0;
+
+        if (sets[fileName] !== undefined) {
+            sameNameCount++;
+            while (sets[`${fileName}(${sameNameCount})`]) sameNameCount++;
+
+            fileName = `${fileName}(${sameNameCount})`;
+        }
+
+        //handle reading data
+        const reader = new FileReader();
+
+        reader.onload = event => {
+            sets[fileName] = JSON.parse(event.target.result);
+            sets = sets;
+        };
+        reader.onerror = err => console.log(err);
+        reader.readAsText(importedFile);
+    }
+
+    $: console.log($state)
 </script>
 
 <main>
@@ -102,12 +146,19 @@
         <header>
             <input placeholder="Filter..." bind:value={setFilter}/>
             <button>Create Set</button>
-            <button>Import From File</button>
+            <label for="sets-from-file-input">Import From File</label>
+            <input 
+                id="sets-from-file-input"
+                type="file" 
+                accept="application/json" 
+                on:change={handleSetImport}
+            />
         </header>
 
         {@const filteredSets = setFilter === "" 
             ? Object.keys(sets)
-            : Object.keys(sets).filter(set => set.toLocaleLowerCase().includes(setFilter.toLocaleLowerCase()))
+            : Object.keys(sets)
+                .filter(set => set.toLocaleLowerCase().includes(setFilter.toLocaleLowerCase()))
         }
         {#if filteredSets.length > 0}
             {#each filteredSets as set, id (id)}
@@ -115,10 +166,14 @@
                     <h3>{set}</h3>
                     <button on:click={() => {
                         currentSet = sets[set];
+                        countries = Object.keys(currentSet);
                         startGame();
                     }}>Choose</button>
                     <button>Modify</button>
-                    <button>Delete</button>
+                    <button on:click={() => {
+                        delete sets[set];
+                        sets = sets; //for reactive refresh
+                    }}>Delete</button>
                 </div>
             {/each}
         {:else}
@@ -157,7 +212,7 @@
         margin-right: auto;
     }
 
-    header input, button {
+    header input, button, label {
         padding: .4rem 1rem;
         background-color: #333;
         font-size: .95rem;
@@ -166,6 +221,10 @@
         cursor: pointer;
         border-radius: 10px;
         transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    #sets-from-file-input {
+        display: none;
     }
 
     button:hover {
