@@ -34,11 +34,25 @@ export function gameMachine(state, event) { //machine for managing gameState, co
                 return "startMenu"
             } else if (event.type === "startGame") {
                 return "playing"
+            } else if (event.type === "modfiySet") {
+                return "modifyingSet"
             }
         
         case "questionModal":
             if (event.type === "continuePlaying") {
                 return "playing"
+            }
+
+        case "modifyingSet":
+            if (event.type === "openCreateQuestionModal") {
+                return "creatingQuestion"
+            } else if (event.type = "openSetManagementMenu") {
+                return "setManagementMenu"
+            }
+
+        case "creatingQuestion": 
+            if (event.type === "closeModal") {
+                return "modifyingSet"
             }
 
         default: 

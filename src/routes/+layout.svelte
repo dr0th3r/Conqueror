@@ -6,7 +6,13 @@
 
 <header>
     <h2 on:click={() => send({ type: "goToStartMenu"})}>The Conqueror</h2>
-    <button on:click={() => send({ type: "openSetManagementMenu" })}>Manage Question Sets</button>
+    <button 
+        on:click={() => send({ type: "openSetManagementMenu" })}
+    >{$state === "creatingQuestion"
+    ||$state === "modifyingSet"
+    ? "Back To Menu"
+    : "Manage Question Sets"
+    }</button>
 </header>
 
 <slot />
@@ -22,6 +28,7 @@
         background-color: #111;
         color: #f0f0f0;
         font-family: Arial, Helvetica, sans-serif;
+        box-sizing: border-box;
     }
 
     header {

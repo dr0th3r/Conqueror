@@ -18,7 +18,7 @@
 
     let setFilter = "";
 
-    let invidedCountry = null;
+    let selectedCountry = null;
 
     let conquered = [];
 
@@ -48,19 +48,19 @@
 
     function handleAnswer(isCorrect) {
         if (isCorrect) {
-            conquered = [...conquered, invidedCountry];
+            conquered = [...conquered, selectedCountry];
 
             if (conquered.length >= countries.length) {
                 alert("You won!");
                 startGame();
             }
         } else {
-            const invidedCountryNeighbors = neighbors[invidedCountry];
+            const selectedCountryNeighbors = neighbors[selectedCountry];
 
-            //get which of the conquered countries is neighbor of the invided country (invidedCountry)
+            //get which of the conquered countries is neighbor of the invided country (selectedCountry)
             //and delete it from conquered - it was conquered back by opponent
             for (let i = 0; i < conquered.length; i++) {
-                if (invidedCountryNeighbors.includes(conquered[i])) {
+                if (selectedCountryNeighbors.includes(conquered[i])) {
                     conquered.splice(i, 1);
                     conquered = conquered; //needed for reactive refresh
                     break;
@@ -73,7 +73,7 @@
             }
         }
 
-        invidedCountry = null;
+        selectedCountry = null;
         send({ type: "continuePlaying" })
     }
 
@@ -118,24 +118,59 @@
         reader.readAsText(importedFile);
     }
 
+    function saveQuestion(e) {
+        const formData = new FormData(e.target);
+
+        const correctAnswer = formData.get("answer");
+
+        const answers = formData.getAll("answer");
+
+        //if the set of questions doesn't exist for this country, create an empty set for it
+        !currentSet[selectedCountry] && (currentSet[selectedCountry] = []) 
+
+        currentSet[selectedCountry] = [
+            ...currentSet[selectedCountry],
+            {
+                question: formData.get("question"),
+                answers: answers.sort(() => Math.random() - 0.5),
+                correctAnswer: answers.indexOf(correctAnswer)
+            }
+        ]
+
+        send({type: "closeModal"})
+    }
+
     $: console.log($state)
+
+    $: if ($state === "modifyingSet") {
+        conquered = [];
+    }
 </script>
 
 <main>
     {#if $state === "startMenu"}
         <button on:click={startGame}>Start</button>
-    {:else if $state === "playing" || $state === "questionModal" && !!currentSet} 
+    {:else if  $state === "playing" 
+            || $state === "questionModal" 
+            || $state === "modifyingSet"
+            || $state === "creatingQuestion"
+            && !!currentSet} 
         <EuropeMap 
             {conquered}
             handleClick = {(countryId) => {
                 //if invaded country isn't neighbor of any of the conquered countries
-                if (!conquered.some((country) => neighbors[country]?.includes(countryId))) {
-                    alert("You must only invide neighbor countries!");
-                    return;
-                } 
-
-                invidedCountry = countryId;
-                send({ type: "openQuestionModal" })
+                if ($state === "playing") {
+                    if (!conquered.some((country) => neighbors[country]?.includes(countryId))) {
+                        alert("You must only invide neighbor countries!");
+                        return;
+                    } 
+    
+                    selectedCountry = countryId;
+                    send({ type: "openQuestionModal" })
+                } else if ($state === "modifyingSet" && countryId) {
+                    selectedCountry = countryId;
+                    send({ type: "openCreateQuestionModal"})
+                }
             }}
         />
     {/if}
@@ -146,7 +181,7 @@
         <header>
             <input placeholder="Filter..." bind:value={setFilter}/>
             <button>Create Set</button>
-            <label for="sets-from-file-input">Import From File</label>
+            <label for="sets-from-file-input" id="sets-from-file-label">Import From File</label>
             <input 
                 id="sets-from-file-input"
                 type="file" 
@@ -169,7 +204,11 @@
                         countries = Object.keys(currentSet);
                         startGame();
                     }}>Choose</button>
-                    <button>Modify</button>
+                    <button
+                        on:click={() => {
+                            send({ type: "modfiySet" })
+                        }}
+                    >Modify</button>
                     <button on:click={() => {
                         delete sets[set];
                         sets = sets; //for reactive refresh
@@ -184,7 +223,7 @@
 
 
 {#if $state === "questionModal"}
-    {@const questionData = getRandomQuestion(currentSet, invidedCountry)}
+    {@const questionData = getRandomQuestion(currentSet, selectedCountry)}
     {#if questionData}
         <Modal > <!-- question modal -->
             <h3 class="question">{questionData?.question}</h3>
@@ -193,6 +232,38 @@
             {/each}
         </Modal>
     {/if}
+{/if}
+
+{#if $state === "creatingQuestion" && !!selectedCountry}
+    <Modal>
+        <form on:submit|preventDefault={(e) => {
+            saveQuestion(e);
+/*             const formData = new FormData(e.target);
+            
+            for (const [key, val] of formData.entries()) {
+                console.log(`${key}: ${val}`);
+            } */
+        }}>
+            <div class="group">
+                <label for="question-input">Question:</label>
+                <input type="text" name="question" id="question-input">
+            </div>
+
+            {#each [1, 2, 3, 4] as i (i)}
+                <div class="group">
+                    <label for={`answer${i}`}>{i === 1 ? "Correct" : `Incorrect`} Answer:</label>
+                    <input type="text" id={`answer${i}`} name="answer">
+                </div>
+            {/each}
+
+            <div class="btn-group">
+                <button type="submit" class="save-btn">Save Question</button>
+                <button type="button" class="close-btn" on:click={() => {
+                    send({ type: "closeModal" })
+                }}>Close</button>
+            </div>
+        </form> 
+    </Modal>
 {/if}
 
 <style>
@@ -212,7 +283,7 @@
         margin-right: auto;
     }
 
-    header input, button, label {
+    input, button, #sets-from-file-label {
         padding: .4rem 1rem;
         background-color: #333;
         font-size: .95rem;
@@ -221,6 +292,14 @@
         cursor: pointer;
         border-radius: 10px;
         transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+    
+    input {
+        cursor: text;
+    }
+
+    label {
+        cursor: pointer;
     }
 
     #sets-from-file-input {
@@ -247,5 +326,36 @@
 
     .question {
         text-align: center;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        gap: 1rem;
+    }
+
+    .group {
+        display: flex;
+        flex-direction: column;
+        gap: .25rem;
+    }
+    
+    .btn-group {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .save-btn {
+        flex-grow: 1;
+    }
+
+    .close-btn {
+        flex-grow: 1;
+    }
+
+    form label {
+        width: fit-content;
     }
 </style>
