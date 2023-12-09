@@ -133,11 +133,11 @@
             }, {})
     }
 
-
+/* 
     $: if (conquered && conquered.length > 0) {
         console.log(conquered);
         paths[conquered[conquered.length - 1]].color = pathConqueredColor; //last from conquered because all other changes should already be applied
-    }
+    } */
 </script>
 
 <svg baseprofile="tiny" fill="#ececec" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewbox="0 0 1000 684" width="1300" xmlns="http://www.w3.org/2000/svg">
@@ -149,7 +149,7 @@
             d={path.d}
             id={pathid}
             name={path.name}
-            fill={path.color}
+            fill={isConquered ? pathConqueredColor : path.color}
             style:cursor={isConquered ? "initial" : "pointer"}
 
             on:mouseenter={() => {
@@ -157,7 +157,7 @@
             }}
 
             on:mouseleave={() => {
-                path.color = isConquered ? pathConqueredColor : pathBaseColor;
+                !isConquered && (path.color = pathBaseColor);
             }}
 
             on:click={() => !isConquered && handleClick(pathid)}
